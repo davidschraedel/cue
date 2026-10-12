@@ -20,9 +20,9 @@
       --mut: rgba(232, 223, 216, .46);
       --faint: rgba(232, 223, 216, .26);
       --line: rgba(255, 255, 255, .07);
-      --acc: #d87445;
-      --flesh: #d19a7e;
-      --glow: #8a3f25;
+      --acc: #70e2ff;
+      --flesh: #a6edff;
+      --glow: #0a7594;
       --beat: 4s;
       --hi: .5;
       --lo: .2;
@@ -35,9 +35,9 @@
         --mut: rgba(42, 26, 18, .55);
         --faint: rgba(42, 26, 18, .32);
         --line: rgba(42, 26, 18, .12);
-        --acc: #a8512c;
-        --flesh: #8a5a44;
-        --glow: #d9a07e
+        --acc: #008eb3;
+        --flesh: #00607a;
+        --glow: #aae9f7;
       }
     }
 
@@ -47,9 +47,9 @@
       --mut: rgba(42, 26, 18, .55);
       --faint: rgba(42, 26, 18, .32);
       --line: rgba(42, 26, 18, .12);
-      --acc: #a8512c;
-      --flesh: #8a5a44;
-      --glow: #d9a07e
+      --acc: #008eb3;
+      --flesh: #00607a;
+      --glow: #aae9f7;
     }
 
     :root[data-theme="dark"] {
@@ -416,7 +416,7 @@
   <header>
     <span class="mark">Cue</span>
     <div class="hdr-controls">
-      <input type="color" id="colorPick" class="color-pick" value="#d87445" title="Accent color">
+      <input type="color" id="colorPick" class="color-pick" value="#70e2ff" title="Accent color">
       <button class="pulse" id="pulse" aria-pressed="true"><i></i><span>Pulse on</span></button>
     </div>
   </header>
@@ -509,7 +509,7 @@
   <div class="ctl"><button class="ic re" aria-label="Reroll ${LAB[k]}" disabled><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.3-5.6M20 4v4h-4"/></svg></button>
   <button class="ic lk" aria-label="Lock ${LAB[k]}" aria-pressed="false" disabled><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="${SHACKLE.off}"/></svg></button></div>`;
       list.appendChild(r);
-      rows[k] = { el: r, v: r.querySelector(".v"), s: r.querySelector(".s"), re: r.querySelector(".re"), lk: r.querySelector(".lk"), p: r.querySelector("path:last-of-type") };
+      rows[k] = { el: r, v: r.querySelector(".v"), s: r.querySelector(".s"), re: r.querySelector(".re"), lk: r.querySelector(".lk"), p: r.querySelector(".lk path") };
       rows[k].re.onclick = () => { if (!L[k]) { P[k] = G[k](); paint([k]) } };
       rows[k].lk.onclick = () => { L[k] = !L[k]; paint([]) };
     });
@@ -526,7 +526,7 @@
       s: sentenceRow.querySelector(".s"),
       re: sentenceRow.querySelector(".re"),
       lk: sentenceRow.querySelector(".lk"),
-      p: sentenceRow.querySelector("path:last-of-type")
+      p: sentenceRow.querySelector(".lk path")
     };
     let sentenceLocked = false;
     sRow.re.onclick = () => {
