@@ -99,7 +99,7 @@
 
     body.still .glow {
       animation: none;
-      opacity: calc(var(--lo) + .12)
+      opacity: calc((var(--lo) + var(--hi)) * 0.45)
     }
 
     @keyframes beat {
@@ -195,6 +195,9 @@
       line-height: 1.38;
       max-width: 32em;
       margin: 0 0 3rem;
+      padding: 1.2rem 1.8rem;
+      border-radius: .8rem;
+      background: color-mix(in srgb, var(--bg) 55%, transparent);
       text-wrap: balance;
       text-shadow: 0 0 40px color-mix(in srgb, var(--acc) 30%, transparent)
     }
@@ -384,11 +387,14 @@
     <section class="hero">
       <p class="say empty" id="say" aria-live="polite">Press the button when you're ready.</p>
       <button class="roll" id="roll">New prompt</button>
-      <p class="hint">Lock what you like. New prompt rerolls the rest. Space works too.</p>
+      <p class="hint">Lock/unlock parameters. Click "New prompt" (Space bar)</p>
     </section>
     <section id="list" aria-label="Prompt parameters"></section>
   </main>
-  <footer>make something out of it.</footer>
+  <footer>
+    <p>Create</p>
+    <p style="margin-top:.8rem;font-size:.72rem;letter-spacing:.08em">© 2026 David Schraedel</p>
+  </footer>
   <script>
     const R = n => Math.floor(Math.random() * n), pick = a => a[R(a.length)];
     const cap = s => s.replace(/(^|[.!?]\s+)([a-z])/g, (_, a, b) => a + b.toUpperCase());
@@ -412,40 +418,49 @@
       tempo() {
         const bpm = 40 + R(151), feel = pick(BANDS.find(b => bpm <= b[0])[1]);
         const note = R(8) === 0 ? pick([", half-time feel", ", double-time feel"]) : "";
-        return { v: bpm + " BPM", s: feel + note, bpm, feel, note }
+        const phrase = pick([`around ${bpm}`, `${bpm}, ${feel}`, `at about ${bpm}`, `${bpm} and ${feel}`]) + note;
+        return { v: bpm + " BPM", s: feel + note, bpm, feel, note, phrase }
       },
       meter() {
-        const [n, gs] = pick(METERS); if (!n) return { v: "Free time", s: "no fixed pulse, breathe it", n: 0 };
-        const g = gs.length ? pick(gs) : ""; return { v: String(n), s: g ? "grouped " + g : "straight", n, g }
+        const [n, gs] = pick(METERS);
+        if (!n) { const phrase = pick(["no meter, free time", "unmetered", "free time, no grid"]); return { v: "Free time", s: "no fixed pulse, breathe it", n: 0, phrase } }
+        const g = gs.length ? pick(gs) : "";
+        const phrase = g ? pick([`in ${n}, grouped ${g.replace(/\+/g, "-")}`, `a ${n} feel, ${g.replace(/\+/g, "-")}`]) : pick([`in ${n}`, `a ${n} feel`]);
+        return { v: String(n), s: g ? "grouped " + g : "straight", n, g, phrase }
       },
-      phrasing() { const c = pick(COUNTS), en = pick(ENTER), ed = pick(END); return { v: c + " counts", s: en + ", " + ed, c, en, ed } },
+      phrasing() {
+        const c = pick(COUNTS), en = pick(ENTER), ed = pick(END);
+        const phrase = pick([`phrases of ${c}`, `${c} counts`, `phrase it ${c}`]) + `, ${en}, ${ed}`;
+        return { v: c + " counts", s: en + ", " + ed, c, en, ed, phrase }
+      },
       style() { const a = pick(STYLE); let b = pick(STYLE); const v = R(4) === 0 && b !== a ? a + " meets " + b : a; return { v, s: "" } },
       quality() { return { v: pick(QUAL), s: "" } },
       texture() { const t = pick(TEX), r = pick(REG); return { v: t, s: r + " register", t, r } },
       energy() { const n = 1 + R(10), a = pick(ARC); return { v: n + " of 10", s: a, n, a } },
       sound() {
         if (R(12) === 0) return { v: "Your choice", s: "anything within reach", l: ["whatever you like"] };
-        const a = pick(SND), l = [a]; if (R(3) === 0) { const b = pick(SND); if (b !== a) l.push(b) }
+        const a = pick(SND), l = [a];
+        if (R(3) === 0) { const rest = SND.filter(x => x !== a); if (rest.length) l.push(pick(rest)) }
         return { v: l.join(" + "), s: "", l }
       },
       tonal() { return { v: pick(TON), s: "" } }
     };
 
+    const OPENS = ["Give me", "Let's have", "Try", "I'd like", "Take"];
+    const sentenceCfg = { template: 0, open: OPENS[0] };
+
     function say() {
       const { tempo: t, meter: m, phrasing: p, style: s, quality: q, texture: x, energy: e, sound: so, tonal: to } = P;
-      const tm = pick([`around ${t.bpm}`, `${t.bpm}, ${t.feel}`, `at about ${t.bpm}`, `${t.bpm} and ${t.feel}`]) + (t.note ? t.note : "");
-      const mt = !m.n ? pick(["no meter, free time", "unmetered", "free time, no grid"]) :
-        m.g ? pick([`in ${m.n}, grouped ${m.g.replace(/\+/g, "-")}`, `a ${m.n} feel, ${m.g.replace(/\+/g, "-")}`]) : pick([`in ${m.n}`, `a ${m.n} feel`]);
-      const ph = pick([`phrases of ${p.c}`, `${p.c} counts`, `phrase it ${p.c}`]) + `, ${p.en}, ${p.ed}`;
-      const tx = `${x.t}, ${x.r} register`, sn = so.l.join(" and "), en = `energy's a ${e.n}, ${e.a}`;
-      const open = pick(["Give me", "Let's have", "Try", "I'd like", "Take"]);
+      const tm = t.phrase, mt = m.phrase, ph = p.phrase;
+      const tx = `${x.t}, ${x.r} register`, sn = so.l.join(" and "), en = `energy at ${e.n}, ${e.a}`;
+      const open = sentenceCfg.open;
       const T = [
         `${open} something ${mt}, ${tm}. ${q.v} and ${s.v}. ${ph}. ${tx}, on ${sn}. ${en}.`,
         `${mt}, ${tm}. Think ${s.v}, ${q.v}. ${ph}. ${sn}: ${tx}. Tonal color, ${to.v}. ${en}.`,
-        `${open} ${s.v}, ${q.v}, ${mt} at ${t.bpm}. ${tx}. ${sn}. ${ph}. Keep ${en}.`,
+        `${open} ${s.v}, ${q.v}, ${mt} at ${t.bpm}. ${tx}. ${sn}. ${ph}. ${en}.`,
         `${sn}, please. ${s.v}, ${q.v}. ${mt}, ${tm}. ${ph}. ${tx}. ${en}, ${to.v}.`
       ];
-      return cap(pick(T));
+      return cap(T[sentenceCfg.template]);
     }
 
     const P = {}, L = {}, rows = {};
@@ -474,15 +489,18 @@
         r.re.disabled = !!L[k];
         if (changed.includes(k)) { flash(r.v); flash(r.s) }
       });
-      sayEl.textContent = say(); sayEl.classList.remove("empty"); flash(sayEl);
-      let b = 60 / P.tempo.bpm; while (b < .5) b *= 2;
-      const hi = .22 + .078 * P.energy.n;
+      if (KEYS.every(k => P[k])) { sayEl.textContent = say(); sayEl.classList.remove("empty"); flash(sayEl); }
+      let b = 60 / P.tempo.bpm; while (b < .3) b *= 2;
+      const hi = .15 + .04 * P.energy.n;
       const st = document.documentElement.style;
-      st.setProperty("--beat", b.toFixed(3) + "s"); st.setProperty("--hi", hi.toFixed(2)); st.setProperty("--lo", (hi * .4).toFixed(2));
+      st.setProperty("--beat", b.toFixed(3) + "s"); st.setProperty("--hi", hi.toFixed(2)); st.setProperty("--lo", (hi * .35).toFixed(2));
     }
     function rollAll() {
       const first = !P.tempo, ch = KEYS.filter(k => first || !L[k]);
-      ch.forEach(k => P[k] = G[k]()); paint(ch);
+      ch.forEach(k => P[k] = G[k]());
+      sentenceCfg.template = R(4);
+      sentenceCfg.open = pick(OPENS);
+      paint(ch);
     }
     document.getElementById("roll").onclick = rollAll;
     document.addEventListener("keydown", e => {
