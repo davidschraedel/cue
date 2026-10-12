@@ -20,9 +20,9 @@
       --mut: rgba(232, 223, 216, .46);
       --faint: rgba(232, 223, 216, .26);
       --line: rgba(255, 255, 255, .07);
-      --acc: #d87445;
-      --flesh: #d19a7e;
-      --glow: #8a3f25;
+      --acc: #70b5ff;
+      --flesh: #a8d2ff;
+      --glow: #0e4b82;
       --beat: 4s;
       --hi: .5;
       --lo: .2;
@@ -35,9 +35,9 @@
         --mut: rgba(42, 26, 18, .55);
         --faint: rgba(42, 26, 18, .32);
         --line: rgba(42, 26, 18, .12);
-        --acc: #a8512c;
-        --flesh: #8a5a44;
-        --glow: #d9a07e
+        --acc: #1264b5;
+        --flesh: #0d4880;
+        --glow: #a8d2ff;
       }
     }
 
@@ -47,9 +47,9 @@
       --mut: rgba(42, 26, 18, .55);
       --faint: rgba(42, 26, 18, .32);
       --line: rgba(42, 26, 18, .12);
-      --acc: #a8512c;
-      --flesh: #8a5a44;
-      --glow: #d9a07e
+      --acc: #1264b5;
+      --flesh: #0d4880;
+      --glow: #a8d2ff;
     }
 
     :root[data-theme="dark"] {
@@ -99,7 +99,7 @@
 
     body.still .glow {
       animation: none;
-      opacity: calc(var(--lo) + .12)
+      opacity: calc((var(--lo) + var(--hi)) * 0.45)
     }
 
     @keyframes beat {
@@ -131,6 +131,39 @@
       justify-content: space-between;
       align-items: center;
       padding: 1.6rem clamp(1.5rem, 5vw, 3.5rem)
+    }
+
+    .hdr-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem
+    }
+
+    .color-pick {
+      width: 22px;
+      height: 22px;
+      border: 1.5px solid var(--faint);
+      border-radius: 50%;
+      padding: 0;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background: none;
+      overflow: hidden
+    }
+
+    .color-pick::-webkit-color-swatch-wrapper {
+      padding: 0
+    }
+
+    .color-pick::-webkit-color-swatch {
+      border: none;
+      border-radius: 50%
+    }
+
+    .color-pick::-moz-color-swatch {
+      border: none;
+      border-radius: 50%
     }
 
     .mark {
@@ -195,6 +228,9 @@
       line-height: 1.38;
       max-width: 32em;
       margin: 0 0 3rem;
+      padding: 1.2rem 1.8rem;
+      border-radius: .8rem;
+      background: color-mix(in srgb, var(--bg) 55%, transparent);
       text-wrap: balance;
       text-shadow: 0 0 40px color-mix(in srgb, var(--acc) 30%, transparent)
     }
@@ -285,6 +321,7 @@
       cursor: pointer;
       display: grid;
       place-items: center;
+      overflow: visible;
       transition: color .3s, background .3s
     }
 
@@ -378,17 +415,23 @@
   <div class="glow" aria-hidden="true"></div>
   <header>
     <span class="mark">Cue</span>
-    <button class="pulse" id="pulse" aria-pressed="true"><i></i><span>Pulse on</span></button>
+    <div class="hdr-controls">
+      <input type="color" id="colorPick" class="color-pick" value="#70b5ff" title="Accent color">
+      <button class="pulse" id="pulse" aria-pressed="true"><i></i><span>Pulse on</span></button>
+    </div>
   </header>
   <main>
     <section class="hero">
       <p class="say empty" id="say" aria-live="polite">Press the button when you're ready.</p>
       <button class="roll" id="roll">New prompt</button>
-      <p class="hint">Lock what you like. New prompt rerolls the rest. Space works too.</p>
+      <p class="hint">Lock/unlock parameters. Click "New prompt" (Space bar)</p>
     </section>
     <section id="list" aria-label="Prompt parameters"></section>
   </main>
-  <footer>make something out of it.</footer>
+  <footer>
+    <p>Create</p>
+    <p style="margin-top:.8rem;font-size:.72rem;letter-spacing:.08em">© 2026 David Schraedel</p>
+  </footer>
   <script>
     const R = n => Math.floor(Math.random() * n), pick = a => a[R(a.length)];
     const cap = s => s.replace(/(^|[.!?]\s+)([a-z])/g, (_, a, b) => a + b.toUpperCase());
@@ -412,40 +455,49 @@
       tempo() {
         const bpm = 40 + R(151), feel = pick(BANDS.find(b => bpm <= b[0])[1]);
         const note = R(8) === 0 ? pick([", half-time feel", ", double-time feel"]) : "";
-        return { v: bpm + " BPM", s: feel + note, bpm, feel, note }
+        const phrase = pick([`around ${bpm}`, `${bpm}, ${feel}`, `at about ${bpm}`, `${bpm} and ${feel}`]) + note;
+        return { v: bpm + " BPM", s: feel + note, bpm, feel, note, phrase }
       },
       meter() {
-        const [n, gs] = pick(METERS); if (!n) return { v: "Free time", s: "no fixed pulse, breathe it", n: 0 };
-        const g = gs.length ? pick(gs) : ""; return { v: String(n), s: g ? "grouped " + g : "straight", n, g }
+        const [n, gs] = pick(METERS);
+        if (!n) { const phrase = pick(["no meter, free time", "unmetered", "free time, no grid"]); return { v: "Free time", s: "no fixed pulse, breathe it", n: 0, phrase } }
+        const g = gs.length ? pick(gs) : "";
+        const phrase = g ? pick([`in ${n}, grouped ${g.replace(/\+/g, "-")}`, `a ${n} feel, ${g.replace(/\+/g, "-")}`]) : pick([`in ${n}`, `a ${n} feel`]);
+        return { v: String(n), s: g ? "grouped " + g : "straight", n, g, phrase }
       },
-      phrasing() { const c = pick(COUNTS), en = pick(ENTER), ed = pick(END); return { v: c + " counts", s: en + ", " + ed, c, en, ed } },
+      phrasing() {
+        const c = pick(COUNTS), en = pick(ENTER), ed = pick(END);
+        const phrase = pick([`phrases of ${c}`, `${c} counts`, `phrase it ${c}`]) + `, ${en}, ${ed}`;
+        return { v: c + " counts", s: en + ", " + ed, c, en, ed, phrase }
+      },
       style() { const a = pick(STYLE); let b = pick(STYLE); const v = R(4) === 0 && b !== a ? a + " meets " + b : a; return { v, s: "" } },
       quality() { return { v: pick(QUAL), s: "" } },
       texture() { const t = pick(TEX), r = pick(REG); return { v: t, s: r + " register", t, r } },
       energy() { const n = 1 + R(10), a = pick(ARC); return { v: n + " of 10", s: a, n, a } },
       sound() {
         if (R(12) === 0) return { v: "Your choice", s: "anything within reach", l: ["whatever you like"] };
-        const a = pick(SND), l = [a]; if (R(3) === 0) { const b = pick(SND); if (b !== a) l.push(b) }
+        const a = pick(SND), l = [a];
+        if (R(3) === 0) { const rest = SND.filter(x => x !== a); if (rest.length) l.push(pick(rest)) }
         return { v: l.join(" + "), s: "", l }
       },
       tonal() { return { v: pick(TON), s: "" } }
     };
 
+    const OPENS = ["Give me", "Let's have", "Try", "I'd like", "Take"];
+    const sentenceCfg = { template: 0, open: OPENS[0] };
+
     function say() {
       const { tempo: t, meter: m, phrasing: p, style: s, quality: q, texture: x, energy: e, sound: so, tonal: to } = P;
-      const tm = pick([`around ${t.bpm}`, `${t.bpm}, ${t.feel}`, `at about ${t.bpm}`, `${t.bpm} and ${t.feel}`]) + (t.note ? t.note : "");
-      const mt = !m.n ? pick(["no meter, free time", "unmetered", "free time, no grid"]) :
-        m.g ? pick([`in ${m.n}, grouped ${m.g.replace(/\+/g, "-")}`, `a ${m.n} feel, ${m.g.replace(/\+/g, "-")}`]) : pick([`in ${m.n}`, `a ${m.n} feel`]);
-      const ph = pick([`phrases of ${p.c}`, `${p.c} counts`, `phrase it ${p.c}`]) + `, ${p.en}, ${p.ed}`;
-      const tx = `${x.t}, ${x.r} register`, sn = so.l.join(" and "), en = `energy's a ${e.n}, ${e.a}`;
-      const open = pick(["Give me", "Let's have", "Try", "I'd like", "Take"]);
+      const tm = t.phrase, mt = m.phrase, ph = p.phrase;
+      const tx = `${x.t}, ${x.r} register`, sn = so.l.join(" and "), en = `energy at ${e.n}, ${e.a}`;
+      const open = sentenceCfg.open;
       const T = [
         `${open} something ${mt}, ${tm}. ${q.v} and ${s.v}. ${ph}. ${tx}, on ${sn}. ${en}.`,
         `${mt}, ${tm}. Think ${s.v}, ${q.v}. ${ph}. ${sn}: ${tx}. Tonal color, ${to.v}. ${en}.`,
-        `${open} ${s.v}, ${q.v}, ${mt} at ${t.bpm}. ${tx}. ${sn}. ${ph}. Keep ${en}.`,
+        `${open} ${s.v}, ${q.v}, ${mt} at ${t.bpm}. ${tx}. ${sn}. ${ph}. ${en}.`,
         `${sn}, please. ${s.v}, ${q.v}. ${mt}, ${tm}. ${ph}. ${tx}. ${en}, ${to.v}.`
       ];
-      return cap(pick(T));
+      return cap(T[sentenceCfg.template]);
     }
 
     const P = {}, L = {}, rows = {};
@@ -457,10 +509,43 @@
   <div class="ctl"><button class="ic re" aria-label="Reroll ${LAB[k]}" disabled><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.3-5.6M20 4v4h-4"/></svg></button>
   <button class="ic lk" aria-label="Lock ${LAB[k]}" aria-pressed="false" disabled><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="${SHACKLE.off}"/></svg></button></div>`;
       list.appendChild(r);
-      rows[k] = { el: r, v: r.querySelector(".v"), s: r.querySelector(".s"), re: r.querySelector(".re"), lk: r.querySelector(".lk"), p: r.querySelector("path:last-of-type") };
+      rows[k] = { el: r, v: r.querySelector(".v"), s: r.querySelector(".s"), re: r.querySelector(".re"), lk: r.querySelector(".lk"), p: r.querySelector(".lk path") };
       rows[k].re.onclick = () => { if (!L[k]) { P[k] = G[k](); paint([k]) } };
       rows[k].lk.onclick = () => { L[k] = !L[k]; paint([]) };
     });
+
+    /* --- Sentence row --- */
+    const sentenceRow = document.createElement("div"); sentenceRow.className = "row";
+    sentenceRow.innerHTML = `<span class="lab">Sentence</span><div><span class="v">—</span><span class="s"></span></div>
+    <div class="ctl"><button class="ic re" aria-label="Reroll Sentence" disabled><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.3-5.6M20 4v4h-4"/></svg></button>
+    <button class="ic lk" aria-label="Lock Sentence" aria-pressed="false" disabled><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="${SHACKLE.off}"/></svg></button></div>`;
+    list.appendChild(sentenceRow);
+    const sRow = {
+      el: sentenceRow,
+      v: sentenceRow.querySelector(".v"),
+      s: sentenceRow.querySelector(".s"),
+      re: sentenceRow.querySelector(".re"),
+      lk: sentenceRow.querySelector(".lk"),
+      p: sentenceRow.querySelector(".lk path")
+    };
+    let sentenceLocked = false;
+    sRow.re.onclick = () => {
+      if (!sentenceLocked && KEYS.every(k => P[k])) {
+        sentenceCfg.template = R(4);
+        sentenceCfg.open = pick(OPENS);
+        sRow.v.textContent = sentenceCfg.open + "…";
+        sRow.s.textContent = ["narrative", "direct", "conversational", "shorthand"][sentenceCfg.template];
+        sayEl.textContent = say(); flash(sayEl); flash(sRow.v); flash(sRow.s);
+      }
+    };
+    sRow.lk.onclick = () => {
+      sentenceLocked = !sentenceLocked;
+      sRow.el.classList.toggle("on", sentenceLocked);
+      sRow.lk.setAttribute("aria-pressed", sentenceLocked);
+      sRow.lk.setAttribute("aria-label", (sentenceLocked ? "Unlock" : "Lock") + " Sentence");
+      sRow.p.setAttribute("d", sentenceLocked ? SHACKLE.on : SHACKLE.off);
+      sRow.re.disabled = sentenceLocked;
+    };
 
     function flash(el) { el.classList.remove("sw"); void el.offsetWidth; el.classList.add("sw") }
     function paint(changed) {
@@ -474,15 +559,26 @@
         r.re.disabled = !!L[k];
         if (changed.includes(k)) { flash(r.v); flash(r.s) }
       });
-      sayEl.textContent = say(); sayEl.classList.remove("empty"); flash(sayEl);
-      let b = 60 / P.tempo.bpm; while (b < .5) b *= 2;
-      const hi = .22 + .078 * P.energy.n;
+      if (KEYS.every(k => P[k])) {
+        sayEl.textContent = say(); sayEl.classList.remove("empty"); flash(sayEl);
+        sRow.v.textContent = sentenceCfg.open + "…";
+        sRow.s.textContent = ["narrative", "direct", "conversational", "shorthand"][sentenceCfg.template];
+        sRow.lk.disabled = false; sRow.re.disabled = sentenceLocked;
+        if (changed.length) { flash(sRow.v); flash(sRow.s) }
+      }
+      let b = 60 / P.tempo.bpm; while (b < .3) b *= 2;
+      const hi = .15 + .04 * P.energy.n;
       const st = document.documentElement.style;
-      st.setProperty("--beat", b.toFixed(3) + "s"); st.setProperty("--hi", hi.toFixed(2)); st.setProperty("--lo", (hi * .4).toFixed(2));
+      st.setProperty("--beat", b.toFixed(3) + "s"); st.setProperty("--hi", hi.toFixed(2)); st.setProperty("--lo", (hi * .35).toFixed(2));
     }
     function rollAll() {
       const first = !P.tempo, ch = KEYS.filter(k => first || !L[k]);
-      ch.forEach(k => P[k] = G[k]()); paint(ch);
+      ch.forEach(k => P[k] = G[k]());
+      if (!sentenceLocked) {
+        sentenceCfg.template = R(4);
+        sentenceCfg.open = pick(OPENS);
+      }
+      paint(ch);
     }
     document.getElementById("roll").onclick = rollAll;
     document.addEventListener("keydown", e => {
@@ -493,6 +589,29 @@
       const still = document.body.classList.toggle("still");
       pb.setAttribute("aria-pressed", !still); pb.querySelector("span").textContent = still ? "Pulse off" : "Pulse on"
     };
+
+    /* --- Color picker --- */
+    function hexToHSL(hex) {
+      let r = parseInt(hex.slice(1, 3), 16) / 255;
+      let g = parseInt(hex.slice(3, 5), 16) / 255;
+      let b = parseInt(hex.slice(5, 7), 16) / 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
+      let h = 0, s = 0, l = (max + min) / 2;
+      if (d) {
+        s = l > .5 ? d / (2 - max - min) : d / (max + min);
+        if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+        else if (max === g) h = ((b - r) / d + 2) / 6;
+        else h = ((r - g) / d + 4) / 6;
+      }
+      return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
+    }
+    document.getElementById("colorPick").addEventListener("input", e => {
+      const [h, s, l] = hexToHSL(e.target.value);
+      const st = document.documentElement.style;
+      st.setProperty("--acc", `hsl(${h}, ${s}%, ${l}%)`);
+      st.setProperty("--glow", `hsl(${h}, ${s}%, ${Math.max(l - 20, 10)}%)`);
+      st.setProperty("--flesh", `hsl(${h}, ${Math.max(s - 15, 10)}%, ${Math.min(l + 12, 85)}%)`);
+    });
   </script>
 </body>
 
