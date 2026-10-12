@@ -670,6 +670,36 @@
     const SUN_ICON = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>`;
     const MOON_ICON = `<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
     const themeBtn = document.getElementById("themeToggle");
+    const colorPick = document.getElementById("colorPick");
+
+    const THEME_DEFAULTS = {
+      dark: "#70b5ff",
+      light: "#cf2ab9"
+    };
+
+    const chosenColors = {
+      dark: null,
+      light: null
+    };
+
+    function applyAccentColor(hex, theme) {
+      const st = document.documentElement.style;
+      if (!hex) {
+        st.removeProperty("--acc");
+        st.removeProperty("--glow");
+        st.removeProperty("--flesh");
+        return;
+      }
+      const [h, s, l] = hexToHSL(hex);
+      st.setProperty("--acc", `hsl(${h}, ${s}%, ${l}%)`);
+      if (theme === "light") {
+        st.setProperty("--glow", `hsl(${h}, ${Math.max(s - 10, 20)}%, ${Math.min(Math.max(l + 30, 80), 96)}%)`);
+        st.setProperty("--flesh", `hsl(${h}, ${Math.max(s - 15, 10)}%, ${Math.max(Math.min(l - 20, 38), 12)}%)`);
+      } else {
+        st.setProperty("--glow", `hsl(${h}, ${s}%, ${Math.max(l - 20, 10)}%)`);
+        st.setProperty("--flesh", `hsl(${h}, ${Math.max(s - 15, 10)}%, ${Math.min(l + 12, 85)}%)`);
+      }
+    }
 
     function getSystemTheme() {
       return window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
@@ -689,8 +719,13 @@
       themeBtn.setAttribute("aria-label", label);
       themeBtn.setAttribute("title", label);
 
-      if (!document.documentElement.style.getPropertyValue("--acc")) {
-        colorPick.value = theme === "light" ? "#cf2ab9" : "#70b5ff";
+      const chosen = chosenColors[theme];
+      if (chosen) {
+        applyAccentColor(chosen, theme);
+        colorPick.value = chosen;
+      } else {
+        applyAccentColor(null, theme);
+        colorPick.value = THEME_DEFAULTS[theme];
       }
     }
     applyTheme(getActiveTheme());
@@ -698,10 +733,6 @@
     themeBtn.onclick = () => {
       const current = document.documentElement.getAttribute("data-theme") || getActiveTheme();
       const next = current === "dark" ? "light" : "dark";
-      const st = document.documentElement.style;
-      st.removeProperty("--acc");
-      st.removeProperty("--glow");
-      st.removeProperty("--flesh");
       applyTheme(next, true);
     };
 
@@ -713,13 +744,13 @@
       });
     }
 
-    colorPick.addEventListener("input", e => {
-      const [h, s, l] = hexToHSL(e.target.value);
-      const st = document.documentElement.style;
-      st.setProperty("--acc", `hsl(${h}, ${s}%, ${l}%)`);
-      st.setProperty("--glow", `hsl(${h}, ${s}%, ${Math.max(l - 20, 10)}%)`);
-      st.setProperty("--flesh", `hsl(${h}, ${Math.max(s - 15, 10)}%, ${Math.min(l + 12, 85)}%)`);
-    });
+    const onColorChange = e => {
+      const theme = document.documentElement.getAttribute("data-theme") || getActiveTheme();
+      chosenColors[theme] = e.target.value;
+      applyAccentColor(e.target.value, theme);
+    };
+    colorPick.addEventListener("input", onColorChange);
+    colorPick.addEventListener("change", onColorChange);
 
     /* --- Logo home route & reset --- */
     document.getElementById("logoLink").addEventListener("click", e => {
