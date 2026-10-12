@@ -16,7 +16,7 @@
       padding-top: env(safe-area-inset-top, 0px);
       padding-bottom: env(safe-area-inset-bottom, 0px);
       --bg: #070605;
-      --fg: #e8dfd8;
+      --fg: #e3e3e3;
       --mut: rgba(232, 223, 216, .46);
       --faint: rgba(232, 223, 216, .26);
       --line: rgba(255, 255, 255, .07);
@@ -30,31 +30,37 @@
 
     @media (prefers-color-scheme:light) {
       :root:not([data-theme="dark"]) {
-        --bg: #f3ece4;
-        --fg: #2a1a12;
-        --mut: rgba(42, 26, 18, .55);
-        --faint: rgba(42, 26, 18, .32);
-        --line: rgba(42, 26, 18, .12);
-        --acc: #1264b5;
-        --flesh: #0d4880;
-        --glow: #a8d2ff;
+        --bg: #f1f1f1;
+        --fg: #181818;
+        --mut: rgba(28, 20, 14, .55);
+        --faint: rgba(28, 20, 14, .32);
+        --line: rgba(28, 20, 14, .09);
+        --acc: #cf2ab9;
+        --flesh: #871378;
+        --glow: #f7bee9;
       }
     }
 
     :root[data-theme="light"] {
-      --bg: #f3ece4;
-      --fg: #2a1a12;
-      --mut: rgba(42, 26, 18, .55);
-      --faint: rgba(42, 26, 18, .32);
-      --line: rgba(42, 26, 18, .12);
-      --acc: #1264b5;
-      --flesh: #0d4880;
-      --glow: #a8d2ff;
+      --bg: #f1f1f1;
+      --fg: #181818;
+      --mut: rgba(28, 20, 14, .55);
+      --faint: rgba(28, 20, 14, .32);
+      --line: rgba(28, 20, 14, .09);
+      --acc: #cf2ab9;
+      --flesh: #871378;
+      --glow: #f7bee9;
     }
 
     :root[data-theme="dark"] {
       --bg: #070605;
-      --fg: #e8dfd8
+      --fg: #e3e3e3;
+      --mut: rgba(232, 223, 216, .46);
+      --faint: rgba(232, 223, 216, .26);
+      --line: rgba(255, 255, 255, .07);
+      --acc: #70b5ff;
+      --flesh: #a8d2ff;
+      --glow: #0e4b82;
     }
 
     * {
@@ -171,7 +177,43 @@
       font-weight: 300;
       font-size: 1.7rem;
       letter-spacing: .35em;
-      text-transform: uppercase
+      text-transform: uppercase;
+      color: inherit;
+      text-decoration: none;
+      transition: opacity .3s
+    }
+
+    .mark:hover {
+      opacity: .75
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 0;
+      color: var(--mut);
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      transition: color .3s, background .3s
+    }
+
+    .theme-toggle:hover {
+      color: var(--fg);
+      background: var(--line)
+    }
+
+    .theme-toggle svg {
+      width: 17px;
+      height: 17px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.4;
+      stroke-linecap: round;
+      stroke-linejoin: round
     }
 
     .pulse {
@@ -232,7 +274,8 @@
       border-radius: .8rem;
       background: color-mix(in srgb, var(--bg) 55%, transparent);
       text-wrap: balance;
-      text-shadow: 0 0 40px color-mix(in srgb, var(--acc) 30%, transparent)
+      text-shadow: 0 0 40px color-mix(in srgb, var(--acc) 30%, transparent);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
     }
 
     .say.empty {
@@ -264,17 +307,30 @@
       color: var(--faint)
     }
 
+    #list {
+      background: color-mix(in srgb, var(--fg) 1%, transparent);
+      /* border: 1px solid var(--line); */
+      border-radius: 1.25rem;
+      padding: 0.35rem clamp(1.2rem, 3.5vw, 2.2rem);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
     .row {
       display: grid;
       grid-template-columns: 8.5rem 1fr auto;
       gap: 1rem;
       align-items: baseline;
-      padding: 1.5rem 0;
-      border-top: 1px solid var(--line)
+      padding: 0.9rem 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .row:first-child {
+      border-top: none;
     }
 
     .row:last-child {
-      border-bottom: 1px solid var(--line)
+      border-bottom: none;
     }
 
     .lab {
@@ -414,10 +470,11 @@
 <body>
   <div class="glow" aria-hidden="true"></div>
   <header>
-    <span class="mark">Cue</span>
+    <a href="index.html" class="mark" id="logoLink" title="Reset all prompts">Cue</a>
     <div class="hdr-controls">
       <input type="color" id="colorPick" class="color-pick" value="#70b5ff" title="Accent color">
       <button class="pulse" id="pulse" aria-pressed="true"><i></i><span>Pulse on</span></button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme"></button>
     </div>
   </header>
   <main>
@@ -492,7 +549,7 @@
       const tx = `${x.t}, ${x.r} register`, sn = so.l.join(" and "), en = `energy at ${e.n}, ${e.a}`;
       const open = sentenceCfg.open;
       const T = [
-        `${open} something ${mt}, ${tm}. ${q.v} and ${s.v}. ${ph}. ${tx}, on ${sn}. ${en}.`,
+        `${open} something ${mt}, ${tm}. ${q.v} and ${s.v}. ${ph}. ${tx}, with ${sn}. ${en}.`,
         `${mt}, ${tm}. Think ${s.v}, ${q.v}. ${ph}. ${sn}: ${tx}. Tonal color, ${to.v}. ${en}.`,
         `${open} ${s.v}, ${q.v}, ${mt} at ${t.bpm}. ${tx}. ${sn}. ${ph}. ${en}.`,
         `${sn}, please. ${s.v}, ${q.v}. ${mt}, ${tm}. ${ph}. ${tx}. ${en}, ${to.v}.`
@@ -533,9 +590,7 @@
       if (!sentenceLocked && KEYS.every(k => P[k])) {
         sentenceCfg.template = R(4);
         sentenceCfg.open = pick(OPENS);
-        sRow.v.textContent = sentenceCfg.open + "…";
-        sRow.s.textContent = ["narrative", "direct", "conversational", "shorthand"][sentenceCfg.template];
-        sayEl.textContent = say(); flash(sayEl); flash(sRow.v); flash(sRow.s);
+        paint([], true);
       }
     };
     sRow.lk.onclick = () => {
@@ -548,7 +603,7 @@
     };
 
     function flash(el) { el.classList.remove("sw"); void el.offsetWidth; el.classList.add("sw") }
-    function paint(changed) {
+    function paint(changed, sentenceChanged = false) {
       KEYS.forEach(k => {
         const r = rows[k], d = P[k]; if (!d) return;
         r.v.textContent = d.v; r.s.textContent = d.s;
@@ -560,11 +615,12 @@
         if (changed.includes(k)) { flash(r.v); flash(r.s) }
       });
       if (KEYS.every(k => P[k])) {
-        sayEl.textContent = say(); sayEl.classList.remove("empty"); flash(sayEl);
+        sayEl.textContent = say(); sayEl.classList.remove("empty");
+        if (changed.length || sentenceChanged) { flash(sayEl) }
         sRow.v.textContent = sentenceCfg.open + "…";
         sRow.s.textContent = ["narrative", "direct", "conversational", "shorthand"][sentenceCfg.template];
         sRow.lk.disabled = false; sRow.re.disabled = sentenceLocked;
-        if (changed.length) { flash(sRow.v); flash(sRow.s) }
+        if (sentenceChanged) { flash(sRow.v); flash(sRow.s) }
       }
       let b = 60 / P.tempo.bpm; while (b < .3) b *= 2;
       const hi = .15 + .04 * P.energy.n;
@@ -574,15 +630,20 @@
     function rollAll() {
       const first = !P.tempo, ch = KEYS.filter(k => first || !L[k]);
       ch.forEach(k => P[k] = G[k]());
+      let sentenceChanged = false;
       if (!sentenceLocked) {
         sentenceCfg.template = R(4);
         sentenceCfg.open = pick(OPENS);
+        sentenceChanged = true;
       }
-      paint(ch);
+      paint(ch, sentenceChanged);
     }
     document.getElementById("roll").onclick = rollAll;
     document.addEventListener("keydown", e => {
-      if (e.code === "Space" && e.target.tagName !== "BUTTON") { e.preventDefault(); rollAll() }
+      if (e.code === "Space" && e.target.tagName !== "INPUT") {
+        e.preventDefault();
+        rollAll();
+      }
     });
     const pb = document.getElementById("pulse");
     pb.onclick = () => {
@@ -605,12 +666,99 @@
       }
       return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
     }
-    document.getElementById("colorPick").addEventListener("input", e => {
-      const [h, s, l] = hexToHSL(e.target.value);
+    /* --- Theme toggle & color sync --- */
+    const SUN_ICON = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>`;
+    const MOON_ICON = `<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+    const themeBtn = document.getElementById("themeToggle");
+    const colorPick = document.getElementById("colorPick");
+
+    const THEME_DEFAULTS = {
+      dark: "#70b5ff",
+      light: "#cf2ab9"
+    };
+
+    const chosenColors = {
+      dark: null,
+      light: null
+    };
+
+    function applyAccentColor(hex, theme) {
       const st = document.documentElement.style;
+      if (!hex) {
+        st.removeProperty("--acc");
+        st.removeProperty("--glow");
+        st.removeProperty("--flesh");
+        return;
+      }
+      const [h, s, l] = hexToHSL(hex);
       st.setProperty("--acc", `hsl(${h}, ${s}%, ${l}%)`);
-      st.setProperty("--glow", `hsl(${h}, ${s}%, ${Math.max(l - 20, 10)}%)`);
-      st.setProperty("--flesh", `hsl(${h}, ${Math.max(s - 15, 10)}%, ${Math.min(l + 12, 85)}%)`);
+      if (theme === "light") {
+        st.setProperty("--glow", `hsl(${h}, ${Math.max(s - 10, 20)}%, ${Math.min(Math.max(l + 30, 80), 96)}%)`);
+        st.setProperty("--flesh", `hsl(${h}, ${Math.max(s - 15, 10)}%, ${Math.max(Math.min(l - 20, 38), 12)}%)`);
+      } else {
+        st.setProperty("--glow", `hsl(${h}, ${s}%, ${Math.max(l - 20, 10)}%)`);
+        st.setProperty("--flesh", `hsl(${h}, ${Math.max(s - 15, 10)}%, ${Math.min(l + 12, 85)}%)`);
+      }
+    }
+
+    function getSystemTheme() {
+      return window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    }
+    function getActiveTheme() {
+      const saved = localStorage.getItem("cue-theme");
+      if (saved === "light" || saved === "dark") return saved;
+      return getSystemTheme();
+    }
+    function applyTheme(theme, isManual = false) {
+      document.documentElement.setAttribute("data-theme", theme);
+      if (isManual) {
+        localStorage.setItem("cue-theme", theme);
+      }
+      themeBtn.innerHTML = theme === "dark" ? SUN_ICON : MOON_ICON;
+      const label = theme === "dark" ? "Switch to light theme" : "Switch to dark theme";
+      themeBtn.setAttribute("aria-label", label);
+      themeBtn.setAttribute("title", label);
+
+      const chosen = chosenColors[theme];
+      if (chosen) {
+        applyAccentColor(chosen, theme);
+        colorPick.value = chosen;
+      } else {
+        applyAccentColor(null, theme);
+        colorPick.value = THEME_DEFAULTS[theme];
+      }
+    }
+    applyTheme(getActiveTheme());
+
+    themeBtn.onclick = () => {
+      const current = document.documentElement.getAttribute("data-theme") || getActiveTheme();
+      const next = current === "dark" ? "light" : "dark";
+      applyTheme(next, true);
+    };
+
+    if (window.matchMedia) {
+      window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", e => {
+        if (!localStorage.getItem("cue-theme")) {
+          applyTheme(e.matches ? "light" : "dark");
+        }
+      });
+    }
+
+    const onColorChange = e => {
+      const theme = document.documentElement.getAttribute("data-theme") || getActiveTheme();
+      chosenColors[theme] = e.target.value;
+      applyAccentColor(e.target.value, theme);
+    };
+    colorPick.addEventListener("input", onColorChange);
+    colorPick.addEventListener("change", onColorChange);
+
+    /* --- Logo home route & reset --- */
+    document.getElementById("logoLink").addEventListener("click", e => {
+      if (window.location.protocol !== "file:") {
+        e.preventDefault();
+        const homePath = window.location.pathname.replace(/index\.html$/, "");
+        window.location.href = homePath || "./";
+      }
     });
   </script>
 </body>
