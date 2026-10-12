@@ -1,23 +1,36 @@
 # Cue
 
-A random prompt generator for improvised music in a contemporary dance setting. It works like a teacher calling out instructions to an accompanist, but you press a button instead.
+A random prompt generator for improvised music, inspired by contemporary dance rehearsal settings. It imitates an instructor calling out instructions to an accompanist.
 
 Each press of **New prompt** randomizes:
 
-- **Tempo**, as a BPM plus a feel word
-- **Meter**, including odd meters and groupings (e.g. 7 as 2-2-3), or free time
-- **Phrasing**, meaning count structures like 8, 4 + 4 + 8, or 5 + 3, plus how to enter and end
-- **Style**, a character or genre word, sometimes a hybrid
-- **Quality**, the movement quality the music should evoke
-- **Texture** and register
-- **Energy**, from 1 to 10 with an arc
-- **Sound source**, from hand drums to synths to found objects
-- **Tonal color**
+- **Tempo**, as a BPM plus a feel descriptor (and occasional half-time / double-time feels)
+- **Meter**, including odd meters and groupings (e.g., 7 grouped as 2-2-3), or free time
+- **Phrasing**, count structures (e.g., 8, 4 + 4 + 8, 5 + 3) with entrance and resolution cues
+- **Style**, character or genre descriptors, including hybrid pairings
+- **Quality**, contemporary dance movement qualities the music should evoke
+- **Texture**, density and register focus
+- **Energy**, from 1 to 10 with an energy arc
+- **Sound source**, from hand drums to prepared piano to modular synths and found objects
+- **Tonal color**, harmonic palettes from modal and drone to atonal and pentatonic
+- **Sentence**, a more natural spoken-style callout synthesising all parameters
 
-The results are also written out as a spoken-style sentence, such as "Give me something in 7, grouped 2-2-3, around 84, suspended and sparse...". It's built from a template grammar in the browser, so it needs no AI or API and has no cost.
+---
 
-**Lock** any parameter you like and reroll the rest, or reroll one parameter at a time. The background glow pulses at the rolled tempo and brightens with the energy level (you can turn that off).
+## Features & Controls
 
-## Running it
+- **Spoken Callout Grammar**: The cue is rendered as a natural, conversational sentence (e.g., *"Give me something in 7, grouped 2-2-3, around 84, slow and heavy..."*) using a client-side template grammar without requiring AI, APIs, or internet connectivity.
+- **Independent Lock & Reroll**: Lock any individual parameter (including the Sentence phrasing style) using the shackle icons, or reroll specific parameters one-by-one without altering the rest of your cue.
+- **Sentence Framing Control**: The **Sentence** row can be locked or rerolled independently across narrative, direct, conversational, and shorthand phrasing templates and varied openings (*"Give me"*, *"Let's have"*, *"Try"*, *"I'd like"*, *"Take"*).
+- **Tempo-Synced Pulse**: An ambient background glow pulses in sync with the generated tempo and scales its brightness with the rolled energy level. Toggle this on or off anytime via the **Pulse** button.
+- **Custom Accent Color**: An interactive color picker in the header dynamically shifts the interface accent, text highlight, and ambient glow colors to match desired lighting or mood.
+- **Keyboard Shortcut**: Press the **Space bar** at any time to generate a new prompt.
 
-It's a single static HTML file. Open `cue.html` in a browser. Press the button or the space bar to receive a cue.
+---
+
+## Running Locally
+
+Cue is a self-contained static web application with no build steps or dependencies:
+
+1. Open `index.html` in your browser.
+2. Press **New prompt** or the **Space bar** to generate cues.
