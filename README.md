@@ -19,12 +19,14 @@ Each press of **New prompt** randomizes:
 
 ## Features & Controls
 
-- **Spoken Callout Grammar**: The cue is rendered as a natural, conversational sentence (e.g., *"Give me something in 7, grouped 2-2-3, around 84, slow and heavy..."*) using a client-side template grammar without requiring AI, APIs, or internet connectivity.
+- **Spoken Callout Grammar**: The cue is rendered as a natural, conversational sentence (e.g., *"Give me something in 7, grouped 2-2-3, around 84, slow and heavy…"*) using a client-side template grammar without requiring AI, APIs, or internet connectivity.
 - **Independent Lock & Reroll**: Lock any individual parameter (including the Sentence phrasing style) using the shackle icons, or reroll specific parameters one-by-one without altering the rest of your cue.
-- **Sentence Framing Control**: The **Sentence** row can be locked or rerolled independently across narrative, direct, conversational, and shorthand phrasing templates and varied openings (*"Give me"*, *"Let's have"*, *"Try"*, *"I'd like"*, *"Take"*).
+- **Sentence Framing Control**: The **Sentence** row can be locked or rerolled independently across four templates — narrative, direct, conversational, and shorthand — with varied openings (*"Give me"*, *"Let's have"*, *"Try"*, *"I'd like"*, *"Take"*).
 - **Tempo-Synced Pulse**: An ambient background glow pulses in sync with the generated tempo and scales its brightness with the rolled energy level. Toggle this on or off anytime via the **Pulse** button.
-- **Custom Accent Color**: An interactive color picker in the header dynamically shifts the interface accent, text highlight, and ambient glow colors to match desired lighting or mood.
-- **Keyboard Shortcut**: Press the **Space bar** at any time to generate a new prompt.
+- **Custom Accent Color**: An interactive color picker in the header dynamically shifts the interface accent, text highlight, and ambient glow colors. Custom colors are saved per theme (separate choices for light and dark mode).
+- **Light / Dark Theme Toggle**: A sun/moon button in the header switches between light and dark modes. The selected theme persists across sessions via localStorage and also respects your system preference by default.
+- **Keyboard Shortcut**: Press the **Space bar** to generate a new prompt (does not fire when an input control is focused).
+- **Logo Reset**: Clicking the **Cue** wordmark in the header returns to the home/root route.
 
 ---
 
