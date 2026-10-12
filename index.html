@@ -582,7 +582,10 @@
     }
     document.getElementById("roll").onclick = rollAll;
     document.addEventListener("keydown", e => {
-      if (e.code === "Space" && e.target.tagName !== "BUTTON") { e.preventDefault(); rollAll() }
+      if (e.code === "Space" && e.target.tagName !== "INPUT") {
+        e.preventDefault();
+        rollAll();
+      }
     });
     const pb = document.getElementById("pulse");
     pb.onclick = () => {
