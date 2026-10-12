@@ -16,7 +16,7 @@
       padding-top: env(safe-area-inset-top, 0px);
       padding-bottom: env(safe-area-inset-bottom, 0px);
       --bg: #070605;
-      --fg: #e8dfd8;
+      --fg: #e3e3e3;
       --mut: rgba(232, 223, 216, .46);
       --faint: rgba(232, 223, 216, .26);
       --line: rgba(255, 255, 255, .07);
@@ -30,31 +30,31 @@
 
     @media (prefers-color-scheme:light) {
       :root:not([data-theme="dark"]) {
-        --bg: #f3ece4;
-        --fg: #2a1a12;
-        --mut: rgba(42, 26, 18, .55);
-        --faint: rgba(42, 26, 18, .32);
-        --line: rgba(42, 26, 18, .12);
-        --acc: #cf2a82;
-        --flesh: #791249;
-        --glow: #f7bede;
+        --bg: #f1f1f1;
+        --fg: #181818;
+        --mut: rgba(28, 20, 14, .55);
+        --faint: rgba(28, 20, 14, .32);
+        --line: rgba(28, 20, 14, .09);
+        --acc: #cf2ab9;
+        --flesh: #871378;
+        --glow: #f7bee9;
       }
     }
 
     :root[data-theme="light"] {
-      --bg: #f3ece4;
-      --fg: #2a1a12;
-      --mut: rgba(42, 26, 18, .55);
-      --faint: rgba(42, 26, 18, .32);
-      --line: rgba(42, 26, 18, .12);
-      --acc: #cf2a82;
-      --flesh: #791249;
-      --glow: #f7bede;
+      --bg: #f1f1f1;
+      --fg: #181818;
+      --mut: rgba(28, 20, 14, .55);
+      --faint: rgba(28, 20, 14, .32);
+      --line: rgba(28, 20, 14, .09);
+      --acc: #cf2ab9;
+      --flesh: #871378;
+      --glow: #f7bee9;
     }
 
     :root[data-theme="dark"] {
       --bg: #070605;
-      --fg: #e8dfd8;
+      --fg: #e3e3e3;
       --mut: rgba(232, 223, 216, .46);
       --faint: rgba(232, 223, 216, .26);
       --line: rgba(255, 255, 255, .07);
@@ -308,7 +308,7 @@
     }
 
     #list {
-      background: color-mix(in srgb, var(--fg) 2%, transparent);
+      background: color-mix(in srgb, var(--fg) 1%, transparent);
       /* border: 1px solid var(--line); */
       border-radius: 1.25rem;
       padding: 0.35rem clamp(1.2rem, 3.5vw, 2.2rem);
@@ -549,7 +549,7 @@
       const tx = `${x.t}, ${x.r} register`, sn = so.l.join(" and "), en = `energy at ${e.n}, ${e.a}`;
       const open = sentenceCfg.open;
       const T = [
-        `${open} something ${mt}, ${tm}. ${q.v} and ${s.v}. ${ph}. ${tx}, on ${sn}. ${en}.`,
+        `${open} something ${mt}, ${tm}. ${q.v} and ${s.v}. ${ph}. ${tx}, with ${sn}. ${en}.`,
         `${mt}, ${tm}. Think ${s.v}, ${q.v}. ${ph}. ${sn}: ${tx}. Tonal color, ${to.v}. ${en}.`,
         `${open} ${s.v}, ${q.v}, ${mt} at ${t.bpm}. ${tx}. ${sn}. ${ph}. ${en}.`,
         `${sn}, please. ${s.v}, ${q.v}. ${mt}, ${tm}. ${ph}. ${tx}. ${en}, ${to.v}.`
@@ -690,7 +690,7 @@
       themeBtn.setAttribute("title", label);
 
       if (!document.documentElement.style.getPropertyValue("--acc")) {
-        colorPick.value = theme === "light" ? "#cf2a82" : "#70b5ff";
+        colorPick.value = theme === "light" ? "#cf2ab9" : "#70b5ff";
       }
     }
     applyTheme(getActiveTheme());
