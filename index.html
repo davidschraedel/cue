@@ -26,6 +26,12 @@
       --beat: 4s;
       --hi: .5;
       --lo: .2;
+      --pulse-say-ring: 26%;
+      --pulse-say-glow: 15%;
+      --pulse-say-drop: 18%;
+      --pulse-card-ring: 18%;
+      --pulse-card-glow: 11%;
+      --pulse-card-drop: 14%;
     }
 
     @media (prefers-color-scheme:light) {
@@ -331,9 +337,9 @@
 
       14% {
         box-shadow:
-          0 0 0 1px color-mix(in srgb, var(--acc) 26%, transparent),
-          0 0 10px -1px color-mix(in srgb, var(--acc) 15%, transparent),
-          0 4px 14px -3px color-mix(in srgb, var(--acc) 18%, transparent);
+          0 0 0 1px color-mix(in srgb, var(--acc) var(--pulse-say-ring, 26%), transparent),
+          0 0 10px -1px color-mix(in srgb, var(--acc) var(--pulse-say-glow, 15%), transparent),
+          0 4px 14px -3px color-mix(in srgb, var(--acc) var(--pulse-say-drop, 18%), transparent);
       }
     }
 
@@ -422,9 +428,9 @@
 
       14% {
         box-shadow:
-          0 0 0 1px color-mix(in srgb, var(--acc) 18%, transparent),
-          0 0 9px -1px color-mix(in srgb, var(--acc) 11%, transparent),
-          0 3px 12px -3px color-mix(in srgb, var(--acc) 14%, transparent);
+          0 0 0 1px color-mix(in srgb, var(--acc) var(--pulse-card-ring, 18%), transparent),
+          0 0 9px -1px color-mix(in srgb, var(--acc) var(--pulse-card-glow, 11%), transparent),
+          0 3px 12px -3px color-mix(in srgb, var(--acc) var(--pulse-card-drop, 14%), transparent);
       }
     }
 
@@ -1049,9 +1055,16 @@
         if (sentenceChanged) { flash(sRow.v); flash(sRow.s) }
       }
       let b = 60 / P.tempo.bpm; while (b < .3) b *= 2;
-      const hi = .15 + .04 * P.energy.n;
+      const e = P.energy.n;
+      const hi = .15 + .04 * e;
       const st = document.documentElement.style;
       st.setProperty("--beat", b.toFixed(3) + "s"); st.setProperty("--hi", hi.toFixed(2)); st.setProperty("--lo", (hi * .35).toFixed(2));
+      st.setProperty("--pulse-say-ring", Math.round(7 + 3.5 * e) + "%");
+      st.setProperty("--pulse-say-glow", Math.round(4 + 2.0 * e) + "%");
+      st.setProperty("--pulse-say-drop", Math.round(5 + 2.3 * e) + "%");
+      st.setProperty("--pulse-card-ring", Math.round(5 + 2.4 * e) + "%");
+      st.setProperty("--pulse-card-glow", Math.round(3 + 1.5 * e) + "%");
+      st.setProperty("--pulse-card-drop", Math.round(4 + 1.9 * e) + "%");
     }
     function rollAll() {
       const first = !P.tempo, ch = KEYS.filter(k => first || !L[k]);
