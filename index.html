@@ -476,71 +476,132 @@
     }
 
     .row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      grid-template-areas:
-        "lab ctl"
-        "val val";
-      row-gap: 0.3rem;
-      column-gap: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      padding: 0.65rem 0;
+      width: 100%;
+    }
+
+    .lab-btn,
+    .val-btn {
+      display: flex;
       align-items: center;
-      padding: 0.85rem 0;
+      justify-content: space-between;
+      width: calc(100% + 0.8rem);
+      margin-left: -0.4rem;
+      margin-right: -0.4rem;
+      padding: 0.3rem 0.7rem;
+      background: transparent;
+      border: none;
+      border-radius: 1.5rem;
+      border-top-right-radius: 4rem;
+      border-bottom-right-radius: 4rem;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+      text-align: left;
+      box-sizing: border-box;
+      transition: background .18s ease, box-shadow .2s ease, opacity .2s ease, transform .12s ease;
     }
 
     .lab-btn {
-      grid-area: lab;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      background: transparent;
-      border: none;
-      padding: 0.38rem 0.5rem;
-      margin-left: -0.5rem;
-      margin-top: -0.18rem;
-      margin-bottom: -0.18rem;
-      border-radius: 999px;
-      cursor: pointer;
-      text-align: left;
-      font: inherit;
-      color: inherit;
-      width: fit-content;
-      transition: background .15s ease, box-shadow .25s ease, transform .15s ease, opacity .2s;
+      min-height: 1.85rem;
+    }
+
+    .val-btn {
+      margin-top: 0.05rem;
+      /* padding: 0.25rem 0.7rem; */
     }
 
     .lab-btn:hover:not(:disabled) {
-      background: var(--acc);
-      box-shadow: 0 2px 8px -2px color-mix(in srgb, var(--acc) 50%, transparent);
+      background: color-mix(in srgb, var(--acc) 2%, transparent);
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
     }
 
-    .lab-btn:hover:not(:disabled) .lab {
-      color: var(--bg);
-      -webkit-text-stroke: 0 !important;
+    .lab-btn:hover:not(:disabled) .re-badge {
       opacity: 1;
+      color: var(--fg);
+      background: color-mix(in srgb, var(--acc) 16%, transparent);
     }
 
     .lab-btn:hover:not(:disabled) .re-icon {
-      stroke: var(--bg);
       transform: rotate(45deg);
     }
 
-    .lab-btn:active:not(:disabled) {
-      transform: scale(0.97);
+    .lab-btn:active:not(:disabled),
+    .val-btn:active:not(:disabled) {
+      transform: scale(0.985);
     }
 
     .lab-btn:disabled {
       cursor: default;
+      opacity: 0.35;
+    }
+
+    .val-btn:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--acc) 2%, transparent);
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .val-btn:hover:not(:disabled) .lk-badge {
+      opacity: 0.95;
+      color: var(--fg);
+      background: color-mix(in srgb, var(--acc) 14%, transparent);
+    }
+
+    .val-btn:hover:not(:disabled) .v {
+      opacity: 0.95;
+    }
+
+    .val-btn:disabled {
+      cursor: default;
+    }
+
+    .ic-badge {
+      width: 1.85rem;
+      height: 1.85rem;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--fg);
+      opacity: 0.38;
+      margin-left: 0.5rem;
+      pointer-events: none;
+      transition: color .25s ease, background .25s ease, transform .25s ease, opacity .25s ease;
+    }
+
+    .re-badge,
+    .lk-badge {
+      opacity: 0.38;
+    }
+
+    .val-btn:disabled .lk-badge,
+    .lab-btn:disabled .re-badge {
+      opacity: 0.16;
     }
 
     .re-icon {
       width: 13px;
       height: 13px;
       fill: none;
-      stroke: var(--faint);
-      stroke-width: 1.5;
+      stroke: currentColor;
+      stroke-width: 1.6;
       stroke-linecap: round;
       stroke-linejoin: round;
-      transition: stroke .3s, transform .25s ease;
-      flex-shrink: 0;
+      transition: transform .25s ease;
+    }
+
+    .lk-icon {
+      width: 15px;
+      height: 15px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.35;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: fill .25s ease, stroke .25s ease;
     }
 
     .lab {
@@ -551,18 +612,15 @@
       color: var(--acc);
       cursor: inherit;
       transition: color .25s ease;
+      line-height: 1;
     }
 
     .v-wrap {
-      grid-area: val;
-      min-width: 0;
-    }
-
-    .ctl {
-      grid-area: ctl;
       display: flex;
-      align-self: center;
-      justify-self: end;
+      flex-direction: column;
+      min-width: 0;
+      flex: 1;
+      text-align: left;
     }
 
     :root[data-theme="light"] .lab,
@@ -581,7 +639,7 @@
       font-size: clamp(1.3rem, 2.6vw, 1.8rem);
       line-height: 1.25;
       display: block;
-      transition: color .4s;
+      transition: color .4s, opacity .3s;
       opacity: 0.6;
     }
 
@@ -592,53 +650,26 @@
       color: var(--mut);
       display: block;
       margin-top: .15rem;
-      min-height: 1.2em
+      min-height: 1.2em;
     }
 
     .row.on .v {
       color: var(--flesh);
+      opacity: 0.95;
     }
 
-    .ic {
-      width: 2.4rem;
-      height: 2.4rem;
-      background: none;
-      border: 0;
-      border-radius: 50%;
-      color: var(--faint);
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      overflow: visible;
-      transition: color .3s, background .3s
+    .val-btn[aria-pressed="true"] .lk-badge {
+      color: var(--acc);
+      opacity: 1;
+      background: color-mix(in srgb, var(--acc) 18%, transparent);
     }
 
-    .ic:hover:not(:disabled) {
-      color: var(--fg);
-      background: var(--line)
+    .val-btn[aria-pressed="true"] .lk-icon rect {
+      fill: currentColor;
     }
 
-    .ic:disabled {
-      opacity: .25;
-      cursor: default
-    }
-
-    .ic[aria-pressed="true"] {
-      color: var(--acc)
-    }
-
-    .ic svg {
-      width: 17px;
-      height: 17px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 1.3;
-      stroke-linecap: round;
-      stroke-linejoin: round
-    }
-
-    .ic[aria-pressed="true"] rect {
-      fill: currentColor
+    .val-btn[aria-pressed="true"]:hover {
+      background: color-mix(in srgb, var(--acc) 12%, transparent);
     }
 
     button:focus-visible {
@@ -768,8 +799,8 @@
       }
 
       .params-col .row {
-        padding: 0.5rem 0;
-        row-gap: 0.2rem;
+        padding: 0.45rem 0;
+        gap: 0.15rem;
       }
 
       .params-col .v {
@@ -815,8 +846,8 @@
       }
 
       #list .row {
-        padding: 0.65rem 1.35rem;
-        row-gap: 0.2rem;
+        padding: 0.55rem 1.25rem;
+        gap: 0.15rem;
       }
 
       #list .v {
@@ -910,7 +941,6 @@
       texture() { const t = pick(TEX), r = pick(REG); return { v: t, s: r + " register", t, r } },
       energy() { const n = 1 + R(10), a = pick(ARC); return { v: n + " of 10", s: a, n, a } },
       sound() {
-        if (R(12) === 0) return { v: "Your choice", s: "anything within reach", l: ["whatever you like"] };
         const a = pick(SND), l = [a];
         if (R(3) === 0) { const rest = SND.filter(x => x !== a); if (rest.length) l.push(pick(rest)) }
         return { v: l.join(" + "), s: "", l }
@@ -951,28 +981,31 @@
       r.innerHTML = `
         <button type="button" class="lab-btn" aria-label="Reroll ${LAB[k]}" title="Click to reroll ${LAB[k]}" disabled>
           <span class="lab">${LAB[k]}</span>
-          <svg class="re-icon" viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.3-5.6M20 4v4h-4"/></svg>
+          <span class="ic-badge re-badge" aria-hidden="true">
+            <svg class="re-icon" viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.3-5.6M20 4v4h-4"/></svg>
+          </span>
         </button>
-        <div class="ctl">
-          <button type="button" class="ic lk" aria-label="Lock ${LAB[k]}" aria-pressed="false" disabled>
-            <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="${SHACKLE.off}"/></svg>
-          </button>
-        </div>
-        <div class="v-wrap">
-          <span class="v">—</span>
-          <span class="s"></span>
-        </div>`;
+        <button type="button" class="val-btn lk" aria-label="Lock ${LAB[k]}" title="Click to lock ${LAB[k]}" aria-pressed="false" disabled>
+          <span class="v-wrap">
+            <span class="v">—</span>
+            <span class="s"></span>
+          </span>
+          <span class="ic-badge lk-badge" aria-hidden="true">
+            <svg class="lk-icon" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="${SHACKLE.off}"/></svg>
+          </span>
+        </button>`;
       const labBtn = r.querySelector(".lab-btn");
+      const valBtn = r.querySelector(".val-btn");
       rows[k] = {
         el: r,
         v: r.querySelector(".v"),
         s: r.querySelector(".s"),
         labBtn,
-        lk: r.querySelector(".lk"),
-        p: r.querySelector(".lk path")
+        lk: valBtn,
+        p: valBtn.querySelector(".lk-icon path")
       };
-      labBtn.onclick = () => { if (!L[k]) { P[k] = G[k](); paint([k]) } };
-      rows[k].lk.onclick = () => { L[k] = !L[k]; paint([]) };
+      labBtn.onclick = () => { if (!L[k] && KEYS.every(x => P[x])) { P[k] = G[k](); paint([k]) } };
+      valBtn.onclick = () => { if (KEYS.every(x => P[x])) { L[k] = !L[k]; paint([]) } };
     });
 
     /* --- Sentence row --- */
@@ -980,25 +1013,28 @@
     sentenceRow.innerHTML = `
       <button type="button" class="lab-btn" aria-label="Reroll Sentence" title="Click to reroll Sentence" disabled>
         <span class="lab">Sentence</span>
-        <svg class="re-icon" viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.3-5.6M20 4v4h-4"/></svg>
+        <span class="ic-badge re-badge" aria-hidden="true">
+          <svg class="re-icon" viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.3-5.6M20 4v4h-4"/></svg>
+        </span>
       </button>
-      <div class="ctl">
-        <button type="button" class="ic lk" aria-label="Lock Sentence" aria-pressed="false" disabled>
-          <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="${SHACKLE.off}"/></svg>
-        </button>
-      </div>
-      <div class="v-wrap">
-        <span class="v">—</span>
-        <span class="s"></span>
-      </div>`;
+      <button type="button" class="val-btn lk" aria-label="Lock Sentence" title="Click to lock Sentence" aria-pressed="false" disabled>
+        <span class="v-wrap">
+          <span class="v">—</span>
+          <span class="s"></span>
+        </span>
+        <span class="ic-badge lk-badge" aria-hidden="true">
+          <svg class="lk-icon" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="${SHACKLE.off}"/></svg>
+        </span>
+      </button>`;
     const sLabBtn = sentenceRow.querySelector(".lab-btn");
+    const sValBtn = sentenceRow.querySelector(".val-btn");
     const sRow = {
       el: sentenceRow,
       v: sentenceRow.querySelector(".v"),
       s: sentenceRow.querySelector(".s"),
       labBtn: sLabBtn,
-      lk: sentenceRow.querySelector(".lk"),
-      p: sentenceRow.querySelector(".lk path")
+      lk: sValBtn,
+      p: sValBtn.querySelector(".lk-icon path")
     };
     let sentenceLocked = false;
     sLabBtn.onclick = () => {
@@ -1008,13 +1044,17 @@
         paint([], true);
       }
     };
-    sRow.lk.onclick = () => {
-      sentenceLocked = !sentenceLocked;
-      sRow.el.classList.toggle("on", sentenceLocked);
-      sRow.lk.setAttribute("aria-pressed", sentenceLocked);
-      sRow.lk.setAttribute("aria-label", (sentenceLocked ? "Unlock" : "Lock") + " Sentence");
-      sRow.p.setAttribute("d", sentenceLocked ? SHACKLE.on : SHACKLE.off);
-      sRow.labBtn.disabled = sentenceLocked;
+    sValBtn.onclick = () => {
+      if (KEYS.every(k => P[k])) {
+        sentenceLocked = !sentenceLocked;
+        sRow.el.classList.toggle("on", sentenceLocked);
+        sRow.lk.setAttribute("aria-pressed", sentenceLocked);
+        sRow.lk.setAttribute("aria-label", (sentenceLocked ? "Unlock" : "Lock") + " Sentence");
+        sRow.lk.title = (sentenceLocked ? "Click to unlock" : "Click to lock") + " Sentence";
+        sRow.p.setAttribute("d", sentenceLocked ? SHACKLE.on : SHACKLE.off);
+        sRow.labBtn.disabled = sentenceLocked;
+        sRow.labBtn.title = sentenceLocked ? "Sentence is locked" : "Click to reroll Sentence";
+      }
     };
 
     /* --- Responsive distribution --- */
@@ -1041,8 +1081,10 @@
         r.el.classList.toggle("on", !!L[k]);
         r.lk.disabled = false; r.lk.setAttribute("aria-pressed", !!L[k]);
         r.lk.setAttribute("aria-label", (L[k] ? "Unlock " : "Lock ") + LAB[k]);
+        r.lk.title = (L[k] ? "Click to unlock " : "Click to lock ") + LAB[k];
         r.p.setAttribute("d", L[k] ? SHACKLE.on : SHACKLE.off);
         r.labBtn.disabled = !!L[k];
+        r.labBtn.title = L[k] ? `${LAB[k]} is locked` : `Click to reroll ${LAB[k]}`;
         if (changed.includes(k)) { flash(r.v); flash(r.s) }
       });
       if (KEYS.every(k => P[k])) {
@@ -1050,7 +1092,13 @@
         if (changed.length || sentenceChanged) { flash(sayEl) }
         sRow.v.textContent = sentenceCfg.open + "…";
         sRow.s.textContent = ["narrative", "direct", "conversational", "shorthand"][sentenceCfg.template];
-        sRow.lk.disabled = false; sRow.labBtn.disabled = sentenceLocked;
+        sRow.lk.disabled = false;
+        sRow.lk.setAttribute("aria-pressed", sentenceLocked);
+        sRow.lk.setAttribute("aria-label", (sentenceLocked ? "Unlock" : "Lock") + " Sentence");
+        sRow.lk.title = (sentenceLocked ? "Click to unlock" : "Click to lock") + " Sentence";
+        sRow.p.setAttribute("d", sentenceLocked ? SHACKLE.on : SHACKLE.off);
+        sRow.labBtn.disabled = sentenceLocked;
+        sRow.labBtn.title = sentenceLocked ? "Sentence is locked" : "Click to reroll Sentence";
         if (sentenceChanged) { flash(sRow.v); flash(sRow.s) }
       }
       let b = 60 / P.tempo.bpm; while (b < .3) b *= 2;
