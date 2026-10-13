@@ -272,7 +272,7 @@
     .say {
       font-family: "Cormorant Garamond", serif;
       font-style: italic;
-      font-weight: 300;
+      font-weight: 500;
       font-size: clamp(1.6rem, 3.9vw, 2.35rem);
       line-height: 1.36;
       max-width: 32em;
@@ -575,7 +575,8 @@
       font-size: clamp(1.3rem, 2.6vw, 1.8rem);
       line-height: 1.25;
       display: block;
-      transition: color .4s
+      transition: color .4s;
+      opacity: 0.6;
     }
 
     .s {
@@ -589,7 +590,7 @@
     }
 
     .row.on .v {
-      color: var(--flesh)
+      color: var(--flesh);
     }
 
     .ic {
@@ -650,7 +651,6 @@
       }
 
       to {
-        opacity: 1;
         filter: none
       }
     }
