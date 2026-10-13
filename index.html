@@ -69,7 +69,7 @@
       --acc: #70b5ff;
       --flesh: #a8d2ff;
       --glow: #0e4b82;
-      box-shadow: inset 0 0 9rem color-mix(in srgb, var(--glow) 20%, transparent);
+      box-shadow: inset 0 0 6rem color-mix(in srgb, var(--glow) 15%, transparent);
     }
 
     * {
@@ -290,7 +290,7 @@
       margin: 0 0 1.5rem;
       padding: 1.1rem 1.75rem;
       border-radius: 0.5rem;
-      background: color-mix(in srgb, var(--bg) 55%, transparent);
+      background: color-mix(in srgb, var(--bg) 80%, transparent);
       text-wrap: balance;
       text-shadow: 0 0 40px color-mix(in srgb, var(--acc) 30%, transparent);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
@@ -1120,6 +1120,17 @@
       light: null
     };
 
+    function getHueLuminance(h) {
+      const hp = (((h % 360) + 360) % 360) / 60;
+      const x = 1 - Math.abs((hp % 2) - 1);
+      if (hp < 1) return 0.2126 + 0.7152 * x;
+      if (hp < 2) return 0.2126 * x + 0.7152;
+      if (hp < 3) return 0.7152 + 0.0722 * x;
+      if (hp < 4) return 0.7152 * x + 0.0722;
+      if (hp < 5) return 0.2126 * x + 0.0722;
+      return 0.2126 + 0.0722 * x;
+    }
+
     function applyAccentColor(hex, theme) {
       const st = document.documentElement.style;
       if (!hex) {
@@ -1134,7 +1145,13 @@
         st.setProperty("--glow", `hsl(${h}, ${Math.max(s - 15, 20)}%, ${Math.min(Math.max(l + 30, 82), 95)}%)`);
         st.setProperty("--flesh", `hsl(${h}, ${Math.max(s - 10, 15)}%, ${Math.max(Math.min(l - 22, 34), 14)}%)`);
       } else {
-        st.setProperty("--glow", `hsl(${h}, ${s}%, ${Math.max(l - 20, 10)}%)`);
+        const lum = getHueLuminance(h);
+        const refLum = 0.42; // Perceived luminance for default blue (~211deg)
+        const lumFactor = Math.min(refLum / lum, 1.0);
+        const baseL = Math.min(Math.max((l / 72) * 28, 12), 28);
+        const glowL = Math.max(Math.round(baseL * lumFactor), 10);
+        const glowS = Math.min(Math.max(Math.round(s * 0.8), 20), 80);
+        st.setProperty("--glow", `hsl(${h}, ${glowS}%, ${glowL}%)`);
         st.setProperty("--flesh", `hsl(${h}, ${Math.max(s - 15, 10)}%, ${Math.min(l + 12, 85)}%)`);
       }
     }
