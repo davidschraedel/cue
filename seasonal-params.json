@@ -1,0 +1,325 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Seasonal parameter vocabulary for Cue",
+  "seasons": {
+    "spring": {
+      "tempoFeel": [
+        "springing momentum",
+        "skipping and buoyant",
+        "accelerando",
+        "light-footed",
+        "percolating",
+        "unfurling pace",
+        "quickening pulse"
+      ],
+      "energyArc": [
+        "rising momentum",
+        "bursting forth",
+        "quickening pulses",
+        "cresting wave",
+        "gentle rise, sudden bloom",
+        "ebb and flow lightly",
+        "clean release",
+        "quickening bounce",
+        "dripping and swelling",
+        "springing upward"
+      ],
+      "style": [
+        "breezy waltz",
+        "courtly dance",
+        "pastoral awakening",
+        "rain ritual",
+        "brass fanfare",
+        "breeze drift",
+        "percolating reel"
+      ],
+      "quality": [
+        "supple",
+        "agile",
+        "limber",
+        "rebounding",
+        "elastic",
+        "bouncing",
+        "effervescent",
+        "buoyant",
+        "percolating",
+        "sinking",
+        "wilting"
+      ],
+      "texture": [
+        "dappled",
+        "trickling",
+        "opening up",
+        "pointillistic",
+        "cross-currents",
+        "aerated"
+      ],
+      "sound": [
+        "water drops",
+        "wooden marimba",
+        "flute breaths",
+        "pizzicato strings",
+        "wind chimes",
+        "seed rattles",
+        "acoustic guitar"
+      ],
+      "tonal": [
+        "lydian",
+        "open fourths and fifths",
+        "pastel chords",
+        "sparkling",
+        "unfurling major"
+      ]
+    },
+    "summer": {
+      "tempoFeel": [
+        "fever pitch",
+        "relentless heatwave",
+        "frenetic buzzing",
+        "sweltering drag",
+        "stifling crawl",
+        "drunken sway",
+        "lazy drift",
+        "unhurried glide",
+        "late-night groove",
+        "breezy stroll",
+        "cool sway",
+        "lazy afternoon lull"
+      ],
+      "energyArc": [
+        "relentless scorch",
+        "building heat lightning",
+        "sudden squall",
+        "simmering, then explosion",
+        "willowish crest",
+        "sustained sun",
+        "heavy, suffocating lull",
+        "slow drowsy sink",
+        "floating on calm water",
+        "cool evening descent",
+        "lazy swell and fade"
+      ],
+      "style": [
+        "carnival frenzy",
+        "thunderstorm allegro",
+        "heatwave trance",
+        "sun dance",
+        "wild-flower frenzy",
+        "desert caravan",
+        "twilight ambient",
+        "lounge bossa",
+        "porch folk",
+        "night swim",
+        "balearic sway",
+        "slow groove",
+        "lazy midday sway",
+        "firefly nocturne"
+      ],
+      "quality": [
+        "feverish",
+        "scorching",
+        "radiant",
+        "relentless",
+        "sweltering",
+        "languid",
+        "heavy-limbed",
+        "goosebumping",
+        "fluid",
+        "buoyant",
+        "silky",
+        "calm",
+        "spacious",
+        "unwound",
+        "shimmering",
+        "undulating"
+      ],
+      "texture": [
+        "humid and dense",
+        "buzzing",
+        "wide and blinding",
+        "saturated",
+        "mirage-like",
+        "soft heat",
+        "spacious and airy",
+        "gentle ripple",
+        "warm haze"
+      ],
+      "sound": [
+        "saturated synth",
+        "distorted string",
+        "distorted organ",
+        "cuíca",
+        "resonant gongs",
+        "steel drum",
+        "sub-bass rumble",
+        "insects and cicadas",
+        "nylon string guitar",
+        "rhodes keys",
+        "soft shaker",
+        "handpan",
+        "muted trumpet",
+        "warm analog pad"
+      ],
+      "tonal": [
+        "blistering dissonance",
+        "droning fifths",
+        "dorian",
+        "warm pentatonic",
+        "golden major",
+        "mellow major 7ths",
+        "dreamy mixolydian",
+        "breezy suspended chords"
+      ]
+    },
+    "fall": {
+      "tempoFeel": [
+        "brisk stride",
+        "brittle rush",
+        "creaking pace",
+        "windswept drift",
+        "measured gait",
+        "hesitant and dragging",
+        "scattering grains"
+      ],
+      "energyArc": [
+        "windswept gusts",
+        "fading into dusk",
+        "gradual decay",
+        "surging gale",
+        "peeling layers",
+        "waning light"
+      ],
+      "style": [
+        "lively ritual",
+        "cheerful elegy",
+        "wind dance",
+        "archaic march",
+        "fireside reel",
+        "spectral sigh",
+        "creaking processional"
+      ],
+      "quality": [
+        "crisp",
+        "crumpling",
+        "brittle",
+        "sweeping",
+        "rustling",
+        "somber",
+        "weathered",
+        "hollow"
+      ],
+      "texture": [
+        "papery friction",
+        "hollow wood",
+        "sparse and gusty",
+        "twilight reverberation",
+        "creaking",
+        "hollowed-out",
+        "layer peeling"
+      ],
+      "sound": [
+        "wooden sticks",
+        "cello rasp",
+        "deep frame drum",
+        "prepared upright piano",
+        "harmonium",
+        "dry shakers",
+        "resonant clay pot"
+      ],
+      "tonal": [
+        "aeolian",
+        "amber minor",
+        "haunting modal",
+        "swirling whole-tone",
+        "diminished shadows"
+      ]
+    },
+    "winter": {
+      "tempoFeel": [
+        "brisk and nimble",
+        "high-spirited bounce",
+        "driving momentum",
+        "rebounding pace",
+        "crisp sprint",
+        "lofty crawl",
+        "majestic stillness",
+        "lively suspension",
+        "stark and hurried",
+        "creaking warmth",
+        "hushed footsteps"
+      ],
+      "energyArc": [
+        "warm crescendo",
+        "surging to a bright peak",
+        "festive lift",
+        "steady driving pulse",
+        "gathering heat",
+        "quick freeze",
+        "brightening",
+        "lively movement",
+        "gentle warming",
+        "building energy",
+        "isolated fractures"
+      ],
+      "style": [
+        "festive jig",
+        "hearthside stomp",
+        "choral fanfare",
+        "bright chamber waltz",
+        "spirited reel",
+        "cool processional",
+        "unearthly avalanche",
+        "fireside ballad",
+        "winter lullaby",
+        "kind carousel",
+        "polar drone",
+        "hushed dance",
+        "bright melody",
+        "drifting consciousness"
+      ],
+      "quality": [
+        "radiant",
+        "crisp",
+        "vibrant",
+        "brisk",
+        "awakened",
+        "smooth-flowing",
+        "light and lively",
+        "animated",
+        "restful",
+        "buoyant"
+      ],
+      "texture": [
+        "full and resonant",
+        "bright unison",
+        "glassy",
+        "hollow and echoing",
+        "pure white noise",
+        "frozen stillness",
+        "isolated layers",
+        "sub-zero reverb"
+      ],
+      "sound": [
+        "upright felt piano",
+        "warm brass",
+        "accordion",
+        "vibraphone",
+        "bowed cello",
+        "tubular chimes",
+        "snare with brushes",
+        "acoustic bass",
+        "struck bell",
+        "chamber strings"
+      ],
+      "tonal": [
+        "festive major",
+        "warm dorian",
+        "rich chorale harmony",
+        "pristine fifths",
+        "luminous atonal",
+        "austere modal",
+        "sparkling clusters"
+      ]
+    }
+  }
+}
