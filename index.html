@@ -970,7 +970,7 @@
     const COUNTS = ["8", "8 + 8", "4", "4 + 4 + 8", "6", "12", "16", "7", "5 + 3", "8 + 8 + 4 + 4", "3 + 3 + 2", "10", "9", "2 × 8, then 4 + 4", "4 + 4 + 4 + 2", "5", "3", "11", "8 + 4", "6 + 6 + 4"];
     const ENTER = ["begin on 1", "pickup on the and of the last count", "start after a breath of silence", "come in on 3", "enter late, on 5", "start mid-gesture, no announcement", "build in from nothing"];
     const END = ["resolve on 1", "hold the last count", "fade out", "hard cut", "dissolve into silence", "repeat once, then stop", "trail off unfinished", "land on a single hit"];
-    const STYLE = ["waltz", "march", "tango", "lullaby", "ritual", "mechanical", "industrial", "pastoral", "glitch", "blues", "lament", "processional", "carnival", "hymn", "folk dance", "brushed jazz", "trance", "music box", "chase scene", "heartbeat", "tide", "machine hum", "dub", "gamelan", "minimal ostinato", "breakbeat", "clockwork", "desert caravan", "nightclub", "underwater"];
+    const STYLE = ["waltz", "march", "tango", "lullaby", "ritual", "mechanical", "industrial", "pastoral", "glitch", "blues", "lament", "processional", "carnival", "hymn", "brushed jazz", "trance", "music box", "chase scene", "heartbeat", "tide", "machine hum", "dub", "gamelan", "minimal ostinato", "breakbeat", "clockwork", "desert caravan", "nightclub", "underwater"];
     const QUAL = ["sustained", "percussive", "vibratory", "suspended", "swinging", "erratic", "collapsing", "bound", "floating", "released", "sharp", "melting", "pressing", "dragging", "quivering", "lunging", "hovering", "rolling", "heavy", "brittle", "slippery", "pulsing", "spiraling", "staccato"];
     const TEX = ["sparse", "dense", "a single line", "layered", "drone-based", "polyrhythmic", "clustered", "dry", "washed in reverb", "spacious", "thick", "interlocking", "call and response", "rubbed and scraped", "granular", "stacked ostinatos"];
     const REG = ["low", "mid", "high", "whole-range", "top and bottom, nothing between"];
@@ -991,9 +991,46 @@
       10: "all-out intensity"
     };
 
+    /* --- Seasonal vocabulary loader --- */
+    const SEASONAL_FEELS = [];
+    function getCurrentSeason() {
+      const param = new URLSearchParams(window.location.search).get("season");
+      if (param && ["spring", "summer", "fall", "winter"].includes(param.toLowerCase())) {
+        return param.toLowerCase();
+      }
+      const m = new Date().getMonth() + 1; // 1 = Jan ... 12 = Dec
+      if (m >= 3 && m <= 5) return "spring"; // Mar–May (3, 4, 5)
+      if (m >= 6 && m <= 8) return "summer"; // Jun–Aug (6, 7, 8)
+      if (m >= 9 && m <= 11) return "fall";  // Sep–Nov (9, 10, 11)
+      return "winter";                       // Dec–Feb (12, 1, 2)
+    }
+    const currentSeason = getCurrentSeason();
+
+    async function loadSeasonalParams() {
+      try {
+        const res = await fetch("seasonal-params.json");
+        if (!res.ok) return;
+        const data = await res.json();
+        const sp = data.seasons?.[currentSeason];
+        if (!sp) return;
+        if (sp.style) STYLE.push(...sp.style);
+        if (sp.quality) QUAL.push(...sp.quality);
+        if (sp.texture) TEX.push(...sp.texture);
+        if (sp.sound) SND.push(...sp.sound);
+        if (sp.tonal) TON.push(...sp.tonal);
+        if (sp.energyArc) ARC.push(...sp.energyArc);
+        if (sp.tempoFeel) SEASONAL_FEELS.push(...sp.tempoFeel);
+      } catch (e) {
+        console.warn("Could not load seasonal parameters:", e);
+      }
+    }
+    loadSeasonalParams();
+
     const G = {
       tempo() {
-        const bpm = 40 + R(151), feel = pick(BANDS.find(b => bpm <= b[0])[1]);
+        const bpm = 40 + R(151);
+        const bandFeels = BANDS.find(b => bpm <= b[0])[1];
+        const feel = (SEASONAL_FEELS.length && R(2) === 0) ? pick(SEASONAL_FEELS) : pick(bandFeels);
         const note = R(8) === 0 ? pick([", half-time feel", ", double-time feel"]) : "";
         const phrase = pick([`around ${bpm}`, `${bpm}, ${feel}`, `at about ${bpm}`, `${bpm} and ${feel}`]) + note;
         return { v: bpm + " BPM", s: feel + note, bpm, feel, note, phrase }
