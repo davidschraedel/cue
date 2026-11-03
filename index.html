@@ -20,9 +20,9 @@
       --mut: rgba(247, 241, 237, 0.564);
       --faint: rgba(232, 223, 216, .26);
       --line: rgba(255, 255, 255, .07);
-      --acc: #70b5ff;
-      --flesh: #a8d2ff;
-      --glow: #0e4b82;
+      --acc: #ffe14d;
+      --flesh: hsl(50, 85%, 77%);
+      --glow: hsl(50, 80%, 13%);
       --beat: 4s;
       --hi: .5;
       --lo: .2;
@@ -41,9 +41,9 @@
         --mut: rgba(51, 65, 85, .62);
         --faint: rgba(51, 65, 85, .35);
         --line: rgba(51, 65, 85, .10);
-        --acc: #297dbc;
-        --flesh: #194366;
-        --glow: #d8ecfb;
+        --acc: #1da7e2;
+        --flesh: hsl(198, 69%, 28%);
+        --glow: hsl(198, 64%, 82%);
         box-shadow: inset 0 0 2rem rgba(0, 0, 0, 0.05);
       }
     }
@@ -54,9 +54,9 @@
       --mut: rgba(51, 65, 85, .62);
       --faint: rgba(51, 65, 85, .35);
       --line: rgba(51, 65, 85, .10);
-      --acc: #297dbc;
-      --flesh: #194366;
-      --glow: #d8ecfb;
+      --acc: #1da7e2;
+      --flesh: hsl(198, 69%, 28%);
+      --glow: hsl(198, 64%, 82%);
       box-shadow: inset 0 0 2rem rgba(0, 0, 0, 0.05);
     }
 
@@ -66,9 +66,9 @@
       --mut: rgba(232, 223, 216, 0.555);
       --faint: rgba(232, 223, 216, .26);
       --line: rgba(255, 255, 255, .07);
-      --acc: #70b5ff;
-      --flesh: #a8d2ff;
-      --glow: #0e4b82;
+      --acc: #ffe14d;
+      --flesh: hsl(50, 85%, 77%);
+      --glow: hsl(50, 80%, 13%);
       box-shadow: inset 0 0 6rem color-mix(in srgb, var(--glow) 15%, transparent);
     }
 
@@ -940,7 +940,7 @@
   <header>
     <a href="index.html" class="mark" id="logoLink" title="Reset all prompts">Cue</a>
     <div class="hdr-controls">
-      <input type="color" id="colorPick" class="color-pick" value="#70b5ff" title="Accent color">
+      <input type="color" id="colorPick" class="color-pick" value="#ffe14d" title="Accent color">
       <button class="pulse" id="pulse" aria-pressed="true"><i></i><span>Pulse on</span></button>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme"></button>
     </div>
@@ -1233,8 +1233,8 @@
     const colorPick = document.getElementById("colorPick");
 
     const THEME_DEFAULTS = {
-      dark: "#70b5ff",
-      light: "#297dbc"
+      dark: "#ffe14d",
+      light: "#1da7e2"
     };
 
     const chosenColors = {
