@@ -92,7 +92,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      overflow-x: hidden;
+      overflow-x: clip;
     }
 
     ::selection {
@@ -138,18 +138,40 @@
       }
     }
 
-    header,
     main,
     footer {
       position: relative;
-      z-index: 1
+      z-index: 1;
     }
 
     header {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.6rem clamp(1.5rem, 5vw, 3.5rem)
+      padding: 1.35rem clamp(1.5rem, 5vw, 3.5rem);
+      background: color-mix(in srgb, var(--bg) 80%, transparent);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    header.scrolled {
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      border-bottom-color: var(--line);
+      box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.35);
+    }
+
+    :root[data-theme="light"] header.scrolled,
+    :root:not([data-theme="dark"]) header.scrolled {
+      background: rgba(245, 245, 245, 0.92);
+      border-bottom-color: var(--line);
+      box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.06);
     }
 
     .hdr-controls {
@@ -717,7 +739,7 @@
       }
 
       header {
-        padding: 1.6rem clamp(1.5rem, 5vw, 3.5rem);
+        padding: 1.35rem clamp(1.5rem, 5vw, 3.5rem);
       }
 
       footer {
@@ -921,6 +943,19 @@
     const SND = ["hand drums", "drum kit", "electronic drums", "synth", "piano", "electric keys", "bowed metal", "prepared piano", "found objects", "voice", "bass", "kalimba", "gong", "cymbal swells", "loop pedal", "contact mic", "shakers and rattles", "cello", "modular synth", "frame drum", "sampler", "singing bowls", "body percussion", "sine tones", "tape hiss"];
     const TON = ["major", "minor", "modal", "atonal", "drone", "noise", "unpitched", "pentatonic", "whole-tone", "clusters", "open fifths", "ambiguous", "dissonant", "bright", "dark", "bluesy"];
 
+    const ENERGY_DESC = {
+      1: "hushed energy",
+      2: "gentle energy",
+      3: "quiet and restrained energy",
+      4: "measured energy",
+      5: "moderate energy",
+      6: "lively energy",
+      7: "driving energy",
+      8: "powerful energy",
+      9: "explosive energy",
+      10: "all-out intensity"
+    };
+
     const G = {
       tempo() {
         const bpm = 40 + R(151), feel = pick(BANDS.find(b => bpm <= b[0])[1]);
@@ -943,7 +978,7 @@
       style() { const a = pick(STYLE); let b = pick(STYLE); const v = R(4) === 0 && b !== a ? a + " meets " + b : a; return { v, s: "" } },
       quality() { return { v: pick(QUAL), s: "" } },
       texture() { const t = pick(TEX), r = pick(REG); return { v: t, s: r + " register", t, r } },
-      energy() { const n = 1 + R(10), a = pick(ARC); return { v: n + " of 10", s: a, n, a } },
+      energy() { const n = 1 + R(10), a = pick(ARC); return { v: n + " of 10", s: a, n, a, desc: ENERGY_DESC[n] } },
       sound() {
         const a = pick(SND), l = [a];
         if (R(3) === 0) { const rest = SND.filter(x => x !== a); if (rest.length) l.push(pick(rest)) }
@@ -958,7 +993,7 @@
     function say() {
       const { tempo: t, meter: m, phrasing: p, style: s, quality: q, texture: x, energy: e, sound: so, tonal: to } = P;
       const tm = t.phrase, mt = m.phrase, ph = p.phrase;
-      const tx = `${x.t}, ${x.r} register`, sn = so.l.join(" and "), en = `energy at ${e.n}, ${e.a}`;
+      const tx = `${x.t}, ${x.r} register`, sn = so.l.join(" and "), en = `${e.desc}, ${e.a}`;
       const open = sentenceCfg.open;
       const T = [
         `${open} something ${mt}, ${tm}. ${q.v} and ${s.v}. ${ph}. ${tx}, with ${sn}. ${en}.`,
@@ -1267,6 +1302,18 @@
         window.location.href = homePath || "./";
       }
     });
+
+    /* --- Sticky header scroll state --- */
+    const headerEl = document.querySelector("header");
+    const onScroll = () => {
+      const scrolled = (window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0) > 8;
+      if (headerEl) {
+        headerEl.classList.toggle("scrolled", scrolled);
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    document.body.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
   </script>
 </body>
 
