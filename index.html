@@ -17,7 +17,7 @@
       padding-bottom: env(safe-area-inset-bottom, 0px);
       --bg: #070605;
       --fg: #e3e3e3;
-      --mut: rgba(232, 223, 216, .46);
+      --mut: rgba(247, 241, 237, 0.564);
       --faint: rgba(232, 223, 216, .26);
       --line: rgba(255, 255, 255, .07);
       --acc: #70b5ff;
@@ -63,7 +63,7 @@
     :root[data-theme="dark"] {
       --bg: #070605;
       --fg: #e3e3e3;
-      --mut: rgba(232, 223, 216, .46);
+      --mut: rgba(232, 223, 216, 0.555);
       --faint: rgba(232, 223, 216, .26);
       --line: rgba(255, 255, 255, .07);
       --acc: #70b5ff;
@@ -138,6 +138,25 @@
       }
     }
 
+    @keyframes tempo-dot {
+
+      0%,
+      100% {
+        opacity: .35;
+        scale: 1;
+        box-shadow: 0 0 0 1px color-mix(in srgb, var(--acc) 25%, transparent);
+      }
+
+      14% {
+        opacity: 1;
+        scale: 1.35;
+        box-shadow:
+          0 0 0 1.5px var(--acc),
+          0 0 10px 2px var(--acc),
+          0 0 20px 4px color-mix(in srgb, var(--acc) 65%, transparent);
+      }
+    }
+
     main,
     footer {
       position: relative;
@@ -184,7 +203,7 @@
       width: 22px;
       height: 22px;
       border: 1.5px solid var(--faint);
-      border-radius: 50%;
+      border-radius: 20%;
       padding: 0;
       cursor: pointer;
       appearance: none;
@@ -199,12 +218,12 @@
 
     .color-pick::-webkit-color-swatch {
       border: none;
-      border-radius: 50%
+      border-radius: 20%
     }
 
     .color-pick::-moz-color-swatch {
       border: none;
-      border-radius: 50%
+      border-radius: 20%
     }
 
     .mark {
@@ -266,15 +285,31 @@
     }
 
     .pulse i {
-      width: 6px;
-      height: 6px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: var(--acc);
-      display: block
+      display: inline-block;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--acc) 25%, transparent);
     }
 
     body:not(.still) .pulse i {
-      animation: beat var(--beat) ease-in-out infinite
+      animation: tempo-dot var(--beat) ease-in-out infinite;
+    }
+
+    body.still .pulse i {
+      opacity: .2;
+      scale: 0.85;
+      background: var(--mut);
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--mut) 30%, transparent);
+      transition: opacity .25s ease, scale .25s ease, box-shadow .25s ease, background-color .25s ease;
+    }
+
+    body.still .pulse:hover i {
+      opacity: .5;
+      background: var(--acc);
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--acc) 30%, transparent);
     }
 
     .pulse:hover {
