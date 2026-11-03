@@ -1,0 +1,262 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Seasonal parameter vocabulary for Cue (Dance Accompanist Prompter)",
+  "seasons": {
+    "spring": {
+      "label": "Spring",
+      "description": "Themes of awakening, renewal, rainfall, thawing, and elastic momentum.",
+      "tempoFeel": [
+        "budding momentum",
+        "skipping and buoyant",
+        "accelerando thaw",
+        "light-footed",
+        "percolating",
+        "unfurling pace",
+        "quickening pulse"
+      ],
+      "energyArc": [
+        "thawing and swelling",
+        "bursting forth from dormancy",
+        "quickening pulses",
+        "gentle rise, sudden bloom",
+        "ebb and fresh flow",
+        "sprouting upward"
+      ],
+      "style": [
+        "thaw waltz",
+        "maypole dance",
+        "pastoral awakening",
+        "rain ritual",
+        "vernal fanfare",
+        "blossom drift",
+        "percolating reel"
+      ],
+      "quality": [
+        "budding",
+        "sprouting",
+        "fluttering",
+        "effervescent",
+        "elastic",
+        "thawing",
+        "percolating",
+        "buoyant"
+      ],
+      "texture": [
+        "dappled",
+        "trickling",
+        "opening up",
+        "pointillistic",
+        "cross-currents",
+        "aerated"
+      ],
+      "sound": [
+        "water drops",
+        "wooden marimba",
+        "flute breaths",
+        "pizzicato strings",
+        "wind chimes",
+        "seed rattles",
+        "acoustic guitar"
+      ],
+      "tonal": [
+        "lydian",
+        "open fourths and fifths",
+        "pastel chords",
+        "sparkling",
+        "unfurling major"
+      ]
+    },
+    "summer": {
+      "label": "Summer",
+      "description": "Themes of radiant heat, languor, sultry nights, sudden storms, and relentless pulse.",
+      "tempoFeel": [
+        "sweltering drag",
+        "fever pitch",
+        "drunken sway",
+        "relentless heatwave",
+        "stifling crawl",
+        "frenetic buzzing",
+        "lazy afternoon lull"
+      ],
+      "energyArc": [
+        "relentless scorch",
+        "sudden squall",
+        "feverish crest",
+        "building toward heat lightning",
+        "sustained high noon",
+        "simmering, then explosion"
+      ],
+      "style": [
+        "sun dance",
+        "heatwave trance",
+        "thunderstorm allegro",
+        "lazy midday sway",
+        "firefly nocturne",
+        "carnival frenzy",
+        "desert caravan"
+      ],
+      "quality": [
+        "sweltering",
+        "shimmering",
+        "languid",
+        "scorching",
+        "feverish",
+        "undulating",
+        "relentless",
+        "radiant"
+      ],
+      "texture": [
+        "humid and dense",
+        "mirage-like",
+        "heat haze",
+        "saturated",
+        "buzzing",
+        "wide and blinding"
+      ],
+      "sound": [
+        "insects and cicadas",
+        "distorted organ",
+        "cuíca",
+        "resonant gongs",
+        "saturated synth",
+        "steel drum",
+        "sub-bass rumble"
+      ],
+      "tonal": [
+        "dorian",
+        "warm pentatonic",
+        "droning fifths",
+        "blistering dissonance",
+        "golden major"
+      ]
+    },
+    "fall": {
+      "label": "Autumn / Fall",
+      "description": "Themes of harvest, amber dusk, brittle foliage, decay, wind, and nostalgic rituals.",
+      "tempoFeel": [
+        "brisk autumn stride",
+        "brittle rush",
+        "creaking pace",
+        "windswept drift",
+        "measured harvest gait",
+        "hesitant and dragging",
+        "scattering tempo"
+      ],
+      "energyArc": [
+        "windswept gusts",
+        "fading into dusk",
+        "gradual decay",
+        "surging like autumn gale",
+        "peeling back layers",
+        "waning light"
+      ],
+      "style": [
+        "harvest ritual",
+        "autumn elegy",
+        "wind dance",
+        "gothic march",
+        "fireside reel",
+        "spectral lament",
+        "creaking processional"
+      ],
+      "quality": [
+        "crisp",
+        "decaying",
+        "brittle",
+        "sweeping",
+        "rustling",
+        "somber",
+        "weathered",
+        "hollow"
+      ],
+      "texture": [
+        "dry leaves",
+        "sparse and gusty",
+        "twilight reverberation",
+        "creaking",
+        "hollowed-out",
+        "layer peeling"
+      ],
+      "sound": [
+        "wooden sticks",
+        "cello rasp",
+        "deep frame drum",
+        "prepared upright piano",
+        "harmonium",
+        "dry shakers",
+        "resonant clay pot"
+      ],
+      "tonal": [
+        "aeolian",
+        "amber minor",
+        "haunting modal",
+        "autumnal whole-tone",
+        "diminished shadows"
+      ]
+    },
+    "winter": {
+      "label": "Winter",
+      "description": "Themes of frost, stillness, isolation, crystalline clarity, hearth, and glacial expanse.",
+      "tempoFeel": [
+        "glacial crawl",
+        "frozen stillness",
+        "numb and suspended",
+        "blizzard sprint",
+        "hushed footsteps",
+        "stark and unhurried",
+        "creaking ice pace"
+      ],
+      "energyArc": [
+        "slow freeze",
+        "hibernating then shattering",
+        "dormant stillness",
+        "sudden cold snap",
+        "fading to absolute zero",
+        "isolated fractures"
+      ],
+      "style": [
+        "frost processional",
+        "blizzard",
+        "fireside ballad",
+        "solstice lullaby",
+        "ice carousel",
+        "polar drone",
+        "hushed nocturne"
+      ],
+      "quality": [
+        "crystalline",
+        "frozen",
+        "hushed",
+        "glacial",
+        "dormant",
+        "sharp-edged",
+        "quivering in cold",
+        "immobile"
+      ],
+      "texture": [
+        "hollow and echoing",
+        "pure white noise",
+        "frozen stillness",
+        "glassy",
+        "isolated layers",
+        "sub-zero reverb"
+      ],
+      "sound": [
+        "bowed crotales",
+        "glass harmonica",
+        "crackling fire",
+        "ice chimes",
+        "muted piano",
+        "distant church bell",
+        "subtle sine freeze"
+      ],
+      "tonal": [
+        "stark minor",
+        "pristine fifths",
+        "hypothermic atonal",
+        "austere modal",
+        "crystalline clusters"
+      ]
+    }
+  }
+}
