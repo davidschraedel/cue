@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&family=Playfair+Display:wght@400&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Playfair+Display:ital,wght@0,400..700;1,400..700&display=swap"
     rel="stylesheet">
   <style>
     :root {
@@ -406,13 +406,15 @@
 
     .roll {
       font-family: "Cormorant Garamond", serif;
-      font-size: 1.35rem;
-      font-style: italic;
+      font-size: 1.15rem;
+      /* font-style: italic; */
+      font-weight: 500;
+      letter-spacing: .02em;
       color: var(--fg);
       background: color-mix(in srgb, var(--acc) 6%, transparent);
       border: 1px solid color-mix(in srgb, var(--acc) 55%, transparent);
       border-radius: 999px;
-      padding: 1rem 3rem;
+      padding: 0.95rem 2.8rem;
       cursor: pointer;
       transition: background .1s, border-color .3s, box-shadow .1s, transform .2s
     }
@@ -705,12 +707,15 @@
     }
 
     .s {
-      font-family: "Cormorant Garamond", serif;
+      font-family: "DM Sans", system-ui, sans-serif;
+      font-size: 0.88rem;
+      font-weight: 400;
       font-style: italic;
-      font-size: 1.1rem;
+      line-height: 1.35;
+      letter-spacing: .01em;
       color: var(--mut);
       display: block;
-      margin-top: .15rem;
+      margin-top: .2rem;
       min-height: 1.2em;
     }
 
@@ -756,9 +761,21 @@
     footer {
       text-align: center;
       padding: 1.25rem 1.5rem 2.8rem;
-      font-family: "Cormorant Garamond", serif;
+      font-family: "DM Sans", system-ui, sans-serif;
+      font-size: 0.84rem;
       font-style: italic;
+      line-height: 1.5;
       color: var(--faint);
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    footer p:last-child {
+      margin-top: 0.45rem;
+      font-size: 0.75rem;
+      letter-spacing: .04em;
     }
 
     @media(max-width:640px) {
@@ -787,7 +804,7 @@
       }
 
       footer p:last-child {
-        margin-top: 0.5rem !important;
+        margin-top: 0.45rem;
       }
 
       main {
@@ -825,8 +842,8 @@
       }
 
       .roll {
-        padding: 0.75rem 2.6rem;
-        font-size: 1.28rem;
+        padding: 0.75rem 2.5rem;
+        font-size: 1.08rem;
       }
 
       .hint {
@@ -870,7 +887,7 @@
       }
 
       .params-col .s {
-        font-size: 0.98rem;
+        font-size: 0.82rem;
       }
 
       #list {
@@ -917,7 +934,7 @@
       }
 
       #list .s {
-        font-size: 0.98rem;
+        font-size: 0.82rem;
       }
     }
 
@@ -957,9 +974,11 @@
   </main>
   <footer>
     <p>Create</p>
-    <p style="margin-top:.8rem;font-size:.72rem;letter-spacing:.08em">© 2026 David Schraedel</p>
+    <p>© 2026 David Schraedel</p>
   </footer>
-  <script>
+  <script type="module">
+    import { SEASONAL_DATA } from './seasonal-params.js';
+
     const R = n => Math.floor(Math.random() * n), pick = a => a[R(a.length)];
     const cap = s => s.replace(/(^|[.!?]\s+)([a-z])/g, (_, a, b) => a + b.toUpperCase());
     const KEYS = ["tempo", "meter", "phrasing", "style", "quality", "texture", "energy", "sound", "tonal"];
@@ -1140,25 +1159,18 @@
     }
     const currentSeason = getCurrentSeason();
 
-    async function loadSeasonalParams() {
-      try {
-        const res = await fetch("seasonal-params.json");
-        if (!res.ok) return;
-        const data = await res.json();
-        const sp = data.seasons?.[currentSeason];
-        if (!sp) return;
-        if (sp.style) STYLE.push(...sp.style);
-        if (sp.quality) QUAL.push(...sp.quality);
-        if (sp.texture) TEX.push(...sp.texture);
-        if (sp.sound) SND.push(...sp.sound);
-        if (sp.tonal) TON.push(...sp.tonal);
-        if (sp.energyArc) ARC.push(...sp.energyArc);
-        if (sp.tempoFeel) SEASONAL_FEELS.push(...sp.tempoFeel);
-      } catch (e) {
-        console.warn("Could not load seasonal parameters:", e);
-      }
+    function applySeasonalParams(season) {
+      const sp = SEASONAL_DATA?.seasons?.[season];
+      if (!sp) return;
+      if (sp.style) STYLE.push(...sp.style);
+      if (sp.quality) QUAL.push(...sp.quality);
+      if (sp.texture) TEX.push(...sp.texture);
+      if (sp.sound) SND.push(...sp.sound);
+      if (sp.tonal) TON.push(...sp.tonal);
+      if (sp.energyArc) ARC.push(...sp.energyArc);
+      if (sp.tempoFeel) SEASONAL_FEELS.push(...sp.tempoFeel);
     }
-    loadSeasonalParams();
+    applySeasonalParams(currentSeason);
 
     const G = {
       tempo() {
@@ -1252,16 +1264,16 @@
     const RIGHT_KEYS = ["sound", "tonal"];
     const SHACKLE = { on: "M8 11V8a4 4 0 018 0v3", off: "M8 11V8a4 4 0 017.4-2.1" };
 
-    KEYS.forEach(k => {
+    function createRow(label, onReroll, onToggleLock) {
       const r = document.createElement("div"); r.className = "row";
       r.innerHTML = `
-        <button type="button" class="lab-btn" aria-label="Reroll ${LAB[k]}" title="Click to reroll ${LAB[k]}" disabled>
-          <span class="lab">${LAB[k]}</span>
+        <button type="button" class="lab-btn" aria-label="Reroll ${label}" title="Click to reroll ${label}" disabled>
+          <span class="lab">${label}</span>
           <span class="ic-badge re-badge" aria-hidden="true">
             <svg class="re-icon" viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.3-5.6M20 4v4h-4"/></svg>
           </span>
         </button>
-        <button type="button" class="val-btn lk" aria-label="Lock ${LAB[k]}" title="Click to lock ${LAB[k]}" aria-pressed="false" disabled>
+        <button type="button" class="val-btn lk" aria-label="Lock ${label}" title="Click to lock ${label}" aria-pressed="false" disabled>
           <span class="v-wrap">
             <span class="v">—</span>
             <span class="s"></span>
@@ -1272,7 +1284,9 @@
         </button>`;
       const labBtn = r.querySelector(".lab-btn");
       const valBtn = r.querySelector(".val-btn");
-      rows[k] = {
+      labBtn.onclick = onReroll;
+      valBtn.onclick = onToggleLock;
+      return {
         el: r,
         v: r.querySelector(".v"),
         s: r.querySelector(".s"),
@@ -1280,68 +1294,63 @@
         lk: valBtn,
         p: valBtn.querySelector(".lk-icon path")
       };
-      labBtn.onclick = () => {
-        if (!L[k] && KEYS.every(x => P[x])) {
-          P[k] = G[k]();
-          const changed = [k];
-          if (k === "meter" && !L.phrasing) {
-            P.phrasing = G.phrasing(P.meter.n);
-            changed.push("phrasing");
+    }
+
+    function syncRowUI(row, label, isLocked, vText, sText, shouldFlash) {
+      row.v.textContent = vText;
+      row.s.textContent = sText;
+      row.el.classList.toggle("on", isLocked);
+      row.lk.disabled = false;
+      row.lk.setAttribute("aria-pressed", isLocked);
+      row.lk.setAttribute("aria-label", (isLocked ? "Unlock " : "Lock ") + label);
+      row.lk.title = (isLocked ? "Click to unlock " : "Click to lock ") + label;
+      row.p.setAttribute("d", isLocked ? SHACKLE.on : SHACKLE.off);
+      row.labBtn.disabled = isLocked;
+      row.labBtn.title = isLocked ? `${label} is locked` : `Click to reroll ${label}`;
+      if (shouldFlash) { flash(row.v); flash(row.s); }
+    }
+
+    KEYS.forEach(k => {
+      rows[k] = createRow(
+        LAB[k],
+        () => {
+          if (!L[k] && KEYS.every(x => P[x])) {
+            P[k] = G[k]();
+            const changed = [k];
+            if (k === "meter" && !L.phrasing) {
+              P.phrasing = G.phrasing(P.meter.n);
+              changed.push("phrasing");
+            }
+            paint(changed);
           }
-          paint(changed);
+        },
+        () => {
+          if (KEYS.every(x => P[x])) {
+            L[k] = !L[k];
+            paint([]);
+          }
         }
-      };
-      valBtn.onclick = () => { if (KEYS.every(x => P[x])) { L[k] = !L[k]; paint([]) } };
+      );
     });
 
     /* --- Sentence row --- */
-    const sentenceRow = document.createElement("div"); sentenceRow.className = "row";
-    sentenceRow.innerHTML = `
-      <button type="button" class="lab-btn" aria-label="Reroll Sentence" title="Click to reroll Sentence" disabled>
-        <span class="lab">Sentence</span>
-        <span class="ic-badge re-badge" aria-hidden="true">
-          <svg class="re-icon" viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.3-5.6M20 4v4h-4"/></svg>
-        </span>
-      </button>
-      <button type="button" class="val-btn lk" aria-label="Lock Sentence" title="Click to lock Sentence" aria-pressed="false" disabled>
-        <span class="v-wrap">
-          <span class="v">—</span>
-          <span class="s"></span>
-        </span>
-        <span class="ic-badge lk-badge" aria-hidden="true">
-          <svg class="lk-icon" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="${SHACKLE.off}"/></svg>
-        </span>
-      </button>`;
-    const sLabBtn = sentenceRow.querySelector(".lab-btn");
-    const sValBtn = sentenceRow.querySelector(".val-btn");
-    const sRow = {
-      el: sentenceRow,
-      v: sentenceRow.querySelector(".v"),
-      s: sentenceRow.querySelector(".s"),
-      labBtn: sLabBtn,
-      lk: sValBtn,
-      p: sValBtn.querySelector(".lk-icon path")
-    };
     let sentenceLocked = false;
-    sLabBtn.onclick = () => {
-      if (!sentenceLocked && KEYS.every(k => P[k])) {
-        sentenceCfg.template = R(TEMPLATES.length);
-        sentenceCfg.open = pick(OPENS);
-        paint([], true);
+    const sRow = createRow(
+      "Sentence",
+      () => {
+        if (!sentenceLocked && KEYS.every(k => P[k])) {
+          sentenceCfg.template = R(TEMPLATES.length);
+          sentenceCfg.open = pick(OPENS);
+          paint([], true);
+        }
+      },
+      () => {
+        if (KEYS.every(k => P[k])) {
+          sentenceLocked = !sentenceLocked;
+          paint([]);
+        }
       }
-    };
-    sValBtn.onclick = () => {
-      if (KEYS.every(k => P[k])) {
-        sentenceLocked = !sentenceLocked;
-        sRow.el.classList.toggle("on", sentenceLocked);
-        sRow.lk.setAttribute("aria-pressed", sentenceLocked);
-        sRow.lk.setAttribute("aria-label", (sentenceLocked ? "Unlock" : "Lock") + " Sentence");
-        sRow.lk.title = (sentenceLocked ? "Click to unlock" : "Click to lock") + " Sentence";
-        sRow.p.setAttribute("d", sentenceLocked ? SHACKLE.on : SHACKLE.off);
-        sRow.labBtn.disabled = sentenceLocked;
-        sRow.labBtn.title = sentenceLocked ? "Sentence is locked" : "Click to reroll Sentence";
-      }
-    };
+    );
 
     /* --- Responsive distribution --- */
     const mql = window.matchMedia("(min-width: 1100px)");
@@ -1363,30 +1372,14 @@
     function paint(changed, sentenceChanged = false) {
       KEYS.forEach(k => {
         const r = rows[k], d = P[k]; if (!d) return;
-        r.v.textContent = d.v; r.s.textContent = d.s;
-        r.el.classList.toggle("on", !!L[k]);
-        r.lk.disabled = false; r.lk.setAttribute("aria-pressed", !!L[k]);
-        r.lk.setAttribute("aria-label", (L[k] ? "Unlock " : "Lock ") + LAB[k]);
-        r.lk.title = (L[k] ? "Click to unlock " : "Click to lock ") + LAB[k];
-        r.p.setAttribute("d", L[k] ? SHACKLE.on : SHACKLE.off);
-        r.labBtn.disabled = !!L[k];
-        r.labBtn.title = L[k] ? `${LAB[k]} is locked` : `Click to reroll ${LAB[k]}`;
-        if (changed.includes(k)) { flash(r.v); flash(r.s) }
+        syncRowUI(r, LAB[k], !!L[k], d.v, d.s, changed.includes(k));
       });
       if (KEYS.every(k => P[k])) {
         sayEl.textContent = say(); sayEl.classList.remove("empty");
-        if (changed.length || sentenceChanged) { flash(sayEl) }
+        if (changed.length || sentenceChanged) { flash(sayEl); }
         const tmpl = TEMPLATES[sentenceCfg.template];
-        sRow.v.textContent = tmpl.usesOpen && sentenceCfg.open ? sentenceCfg.open + "…" : "—";
-        sRow.s.textContent = tmpl.name;
-        sRow.lk.disabled = false;
-        sRow.lk.setAttribute("aria-pressed", sentenceLocked);
-        sRow.lk.setAttribute("aria-label", (sentenceLocked ? "Unlock" : "Lock") + " Sentence");
-        sRow.lk.title = (sentenceLocked ? "Click to unlock" : "Click to lock") + " Sentence";
-        sRow.p.setAttribute("d", sentenceLocked ? SHACKLE.on : SHACKLE.off);
-        sRow.labBtn.disabled = sentenceLocked;
-        sRow.labBtn.title = sentenceLocked ? "Sentence is locked" : "Click to reroll Sentence";
-        if (sentenceChanged) { flash(sRow.v); flash(sRow.s) }
+        const sVal = tmpl.usesOpen && sentenceCfg.open ? sentenceCfg.open + "…" : "—";
+        syncRowUI(sRow, "Sentence", sentenceLocked, sVal, tmpl.name, sentenceChanged);
       }
       let b = 60 / P.tempo.bpm; while (b < .3) b *= 2;
       const e = P.energy.n;

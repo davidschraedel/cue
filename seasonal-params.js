@@ -1,4 +1,4 @@
-{
+export const SEASONAL_DATA = {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "description": "Seasonal parameter vocabulary for Cue",
   "seasons": {
@@ -322,4 +322,4 @@
       ]
     }
   }
-}
+};

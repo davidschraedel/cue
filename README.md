@@ -32,7 +32,14 @@ Each press of **New prompt** randomizes:
 
 ## Running Locally
 
-Cue is a self-contained static web application with no build steps or dependencies:
+Cue is a zero-build static web application that uses modern ES modules. Serve it with any local web server:
 
-1. Open `index.html` in your browser.
-2. Press **New prompt** or the **Space bar** to generate cues.
+```bash
+# Using Python
+python3 -m http.server 8000
+
+# Or using Node / npx
+npx serve .
+```
+
+Open `http://localhost:8000` (or the URL provided by your server) in your browser. You can also use the **Live Server** extension in VS Code.
