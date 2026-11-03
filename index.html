@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&family=Playfair+Display:wght@400&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Playfair+Display:ital,wght@0,400..700;1,400..700&display=swap"
     rel="stylesheet">
   <style>
     :root {
@@ -406,13 +406,15 @@
 
     .roll {
       font-family: "Cormorant Garamond", serif;
-      font-size: 1.35rem;
-      font-style: italic;
+      font-size: 1.17rem;
+      /* font-style: italic; */
+      font-weight: 500;
+      letter-spacing: .02em;
       color: var(--fg);
       background: color-mix(in srgb, var(--acc) 6%, transparent);
       border: 1px solid color-mix(in srgb, var(--acc) 55%, transparent);
       border-radius: 999px;
-      padding: 1rem 3rem;
+      padding: 0.95rem 2.8rem;
       cursor: pointer;
       transition: background .1s, border-color .3s, box-shadow .1s, transform .2s
     }
@@ -705,12 +707,15 @@
     }
 
     .s {
-      font-family: "Cormorant Garamond", serif;
+      font-family: "DM Sans", system-ui, sans-serif;
+      font-size: 0.88rem;
+      font-weight: 400;
       font-style: italic;
-      font-size: 1.1rem;
+      line-height: 1.35;
+      letter-spacing: .01em;
       color: var(--mut);
       display: block;
-      margin-top: .15rem;
+      margin-top: .2rem;
       min-height: 1.2em;
     }
 
@@ -756,9 +761,21 @@
     footer {
       text-align: center;
       padding: 1.25rem 1.5rem 2.8rem;
-      font-family: "Cormorant Garamond", serif;
+      font-family: "DM Sans", system-ui, sans-serif;
+      font-size: 0.84rem;
       font-style: italic;
+      line-height: 1.5;
       color: var(--faint);
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    footer p:last-child {
+      margin-top: 0.45rem;
+      font-size: 0.75rem;
+      letter-spacing: .04em;
     }
 
     @media(max-width:640px) {
@@ -787,7 +804,7 @@
       }
 
       footer p:last-child {
-        margin-top: 0.5rem !important;
+        margin-top: 0.45rem;
       }
 
       main {
@@ -825,8 +842,8 @@
       }
 
       .roll {
-        padding: 0.75rem 2.6rem;
-        font-size: 1.28rem;
+        padding: 0.75rem 2.5rem;
+        font-size: 1.08rem;
       }
 
       .hint {
@@ -870,7 +887,7 @@
       }
 
       .params-col .s {
-        font-size: 0.98rem;
+        font-size: 0.82rem;
       }
 
       #list {
@@ -917,7 +934,7 @@
       }
 
       #list .s {
-        font-size: 0.98rem;
+        font-size: 0.82rem;
       }
     }
 
@@ -957,9 +974,11 @@
   </main>
   <footer>
     <p>Create</p>
-    <p style="margin-top:.8rem;font-size:.72rem;letter-spacing:.08em">© 2026 David Schraedel</p>
+    <p>© 2026 David Schraedel</p>
   </footer>
-  <script>
+  <script type="module">
+    import { SEASONAL_DATA } from './seasonal-params.js';
+
     const R = n => Math.floor(Math.random() * n), pick = a => a[R(a.length)];
     const cap = s => s.replace(/(^|[.!?]\s+)([a-z])/g, (_, a, b) => a + b.toUpperCase());
     const KEYS = ["tempo", "meter", "phrasing", "style", "quality", "texture", "energy", "sound", "tonal"];
@@ -967,9 +986,143 @@
 
     const BANDS = [[55, ["glacial", "barely moving", "suspended"]], [75, ["slow and heavy", "unhurried", "wading"]], [100, ["walking pace", "easy", "loose"]], [130, ["moving", "brisk", "leaning forward"]], [160, ["driving", "urgent", "skittering"]], [999, ["racing", "frantic", "breathless"]]];
     const METERS = [[0, []], [2, []], [3, []], [4, []], [5, ["3+2", "2+3"]], [6, ["3+3", "2+2+2"]], [7, ["2+2+3", "3+2+2", "2+3+2"]], [9, ["3+3+3", "2+2+2+3", "4+5"]], [10, ["3+2+3+2", "5+5", "2+3+2+3"]], [11, ["3+3+3+2", "4+4+3", "2+2+3+2+2"]], [12, ["3+3+3+3", "4+4+4", "6+6"]], [13, ["3+3+3+2+2", "4+4+5"]]];
-    const COUNTS = ["8", "8 + 8", "4", "4 + 4 + 8", "6", "12", "16", "7", "5 + 3", "8 + 8 + 4 + 4", "3 + 3 + 2", "10", "9", "2 × 8, then 4 + 4", "4 + 4 + 4 + 2", "5", "3", "11", "8 + 4", "6 + 6 + 4"];
-    const ENTER = ["begin on 1", "pickup on the and of the last count", "start after a breath of silence", "come in on 3", "enter late, on 5", "start mid-gesture, no announcement", "build in from nothing"];
-    const END = ["resolve on 1", "hold the last count", "fade out", "hard cut", "dissolve into silence", "repeat once, then stop", "trail off unfinished", "land on a single hit"];
+    /* --- Phrasing structures (Approach A: Bars vs. Counts, Approach B: Meter-aware) --- */
+    const PHRASING_FREE = [
+      "Open breath phrases",
+      "Gestural phrasing",
+      "Unmeasured waves",
+      "Continuous flow",
+      "Long movement arcs",
+      "Breath-cycle phrasing",
+      "Elastic phrasing",
+      "Suspended phrasing"
+    ];
+    const ENTER_FREE = [
+      "enter on an inhale",
+      "fade in from silence",
+      "start after a breath",
+      "enter with the first gesture",
+      "build in from nothing",
+      "drift in quietly"
+    ];
+    const END_FREE = [
+      "dissolve into silence",
+      "trail off with the breath",
+      "fade out gradually",
+      "hold and decay",
+      "sudden stillness",
+      "settle into silence"
+    ];
+
+    const PHRASING_DUPLE = [
+      { v: "8 counts", phrase: "phrases of 8 counts" },
+      { v: "8 + 8 counts", phrase: "phrases of 8 + 8 counts" },
+      { v: "16 counts", phrase: "16-count phrases" },
+      { v: "4 + 4 + 8 counts", phrase: "4 + 4 + 8 count phrasing" },
+      { v: "8 + 8 + 4 + 4 counts", phrase: "8 + 8 + 4 + 4 count phrasing" },
+      { v: "2 × 8, then 4 + 4 counts", phrase: "2 × 8, then 4 + 4 counts" },
+      { v: "4 + 4 counts", phrase: "4 + 4 count phrasing" },
+      { v: "8 + 4 counts", phrase: "8 + 4 count phrasing" },
+      { v: "4 bars", phrase: "4-bar phrasing" },
+      { v: "4 + 4 bars", phrase: "4 + 4 bar phrasing" },
+      { v: "8 bars", phrase: "8-bar phrases" },
+      { v: "4 bars + 2 bars", phrase: "4 bars + 2 bars phrasing" },
+      { v: "8-bar phrases", phrase: "phrases of 8 bars" },
+      { v: "16 bars", phrase: "16-bar phrases" }
+    ];
+
+    function getTriplePhrasings(n) {
+      if (n === 3) {
+        return [
+          { v: "4 bars of 3", phrase: "4 bars of 3" },
+          { v: "6 counts (2 bars)", phrase: "phrases of 6 counts (2 bars)" },
+          { v: "6 + 6 counts", phrase: "6 + 6 count phrasing" },
+          { v: "8 bars of 3", phrase: "8-bar waltz phrasing" },
+          { v: "4 + 4 bars", phrase: "4 + 4 bar phrasing" },
+          { v: "12 counts (4 bars)", phrase: "12-count phrasing (4 bars)" },
+          { v: "4 bars + 2 bars", phrase: "4 bars + 2 bars phrasing" },
+          { v: "12-bar arch", phrase: "12-bar phrasing arch" }
+        ];
+      }
+      if (n === 6) {
+        return [
+          { v: "6 counts (1 bar)", phrase: "6-count phrasing" },
+          { v: "6 + 6 counts (2 bars)", phrase: "6 + 6 counts (2 bars)" },
+          { v: "12 counts (2 bars)", phrase: "phrases of 12 counts" },
+          { v: "4 bars of 6", phrase: "4 bars of 6" },
+          { v: "4 + 4 bars", phrase: "4 + 4 bar phrasing" },
+          { v: "8-bar phrases", phrase: "8-bar phrases" },
+          { v: "4 bars + 2 bars", phrase: "4 bars + 2 bars phrasing" }
+        ];
+      }
+      if (n === 9) {
+        return [
+          { v: "2 bars of 9", phrase: "2 bars of 9" },
+          { v: "3-bar phrases", phrase: "3-bar phrases" },
+          { v: "4 bars of 9", phrase: "4 bars of 9" },
+          { v: "4 + 4 bars", phrase: "4 + 4 bar phrasing" },
+          { v: "8 bars", phrase: "8-bar phrases" },
+          { v: "2 bars + 1 bar", phrase: "2 bars + 1 bar phrasing" }
+        ];
+      }
+      return [
+        { v: "12 counts (1 bar)", phrase: "12-count phrasing" },
+        { v: "2 bars of 12", phrase: "2 bars of 12" },
+        { v: "4 bars", phrase: "4-bar phrasing" },
+        { v: "4 + 4 bars", phrase: "4 + 4 bar phrasing" },
+        { v: "8 bars", phrase: "8-bar phrases" },
+        { v: "12-bar arch", phrase: "12-bar phrase arch" }
+      ];
+    }
+
+    function getOddPhrasings(n) {
+      return [
+        { v: "4 bars", phrase: "4-bar phrasing" },
+        { v: "4 + 4 bars", phrase: "4 + 4 bar phrasing" },
+        { v: "2 bars + 2 bars", phrase: "2 bars + 2 bars phrasing" },
+        { v: "4 bars + 2 bars", phrase: "4 bars + 2 bars phrasing" },
+        { v: "8 bars", phrase: "8-bar phrases" },
+        { v: "2-bar phrases", phrase: "phrases of 2 bars" },
+        { v: "3-bar phrases", phrase: "3-bar phrases" },
+        { v: "6 bars", phrase: "6-bar phrasing" },
+        { v: `phrases of ${n} counts`, phrase: `phrases of ${n} counts (1 bar)` },
+        { v: `${n} + ${n} counts (2 bars)`, phrase: `${n} + ${n} counts (2 bars)` },
+        { v: `4 bars of ${n}`, phrase: `4 bars of ${n}` },
+        { v: "Cross-phrasing: 8 counts", phrase: `cross-phrasing: 8 counts against the ${n}` },
+        { v: "Cross-phrasing: 4 + 4", phrase: `cross-phrasing: 4 + 4 against the ${n}` },
+        { v: `Hemiola across ${n}`, phrase: `hemiola phrasing across the ${n}` }
+      ];
+    }
+
+    function getMeteredEnter(n) {
+      const list = [
+        "begin on 1",
+        "start after a breath of silence",
+        "start mid-gesture, no announcement",
+        "build in from nothing"
+      ];
+      if (n === 2) {
+        list.push("pickup on the and of 2", "come in on 2");
+      } else if (n === 3) {
+        list.push("pickup on 3", "come in on 2", "pickup on the and of 3");
+      } else if (n === 4) {
+        list.push("pickup on the and of 4", "come in on 3", "pickup on 4");
+      } else if (n >= 5) {
+        list.push("pickup on the last beat", "come in on 3", "enter late, on 5");
+      }
+      return list;
+    }
+
+    const END_METERED = [
+      "resolve on 1",
+      "hold the last count",
+      "fade out",
+      "hard cut",
+      "dissolve into silence",
+      "repeat once, then stop",
+      "trail off unfinished",
+      "land on a single hit"
+    ];
     const STYLE = ["waltz", "march", "tango", "lullaby", "ritual", "mechanical", "industrial", "pastoral", "glitch", "blues", "lament", "processional", "carnival", "hymn", "brushed jazz", "trance", "music box", "chase scene", "heartbeat", "tide", "machine hum", "dub", "gamelan", "minimal ostinato", "breakbeat", "clockwork", "desert caravan", "nightclub", "underwater"];
     const QUAL = ["sustained", "percussive", "vibratory", "suspended", "swinging", "erratic", "collapsing", "bound", "floating", "released", "sharp", "melting", "pressing", "dragging", "quivering", "lunging", "hovering", "rolling", "heavy", "brittle", "slippery", "pulsing", "spiraling", "staccato"];
     const TEX = ["sparse", "dense", "a single line", "layered", "drone-based", "polyrhythmic", "clustered", "dry", "washed in reverb", "spacious", "thick", "interlocking", "call and response", "rubbed and scraped", "granular", "stacked ostinatos"];
@@ -1006,25 +1159,18 @@
     }
     const currentSeason = getCurrentSeason();
 
-    async function loadSeasonalParams() {
-      try {
-        const res = await fetch("seasonal-params.json");
-        if (!res.ok) return;
-        const data = await res.json();
-        const sp = data.seasons?.[currentSeason];
-        if (!sp) return;
-        if (sp.style) STYLE.push(...sp.style);
-        if (sp.quality) QUAL.push(...sp.quality);
-        if (sp.texture) TEX.push(...sp.texture);
-        if (sp.sound) SND.push(...sp.sound);
-        if (sp.tonal) TON.push(...sp.tonal);
-        if (sp.energyArc) ARC.push(...sp.energyArc);
-        if (sp.tempoFeel) SEASONAL_FEELS.push(...sp.tempoFeel);
-      } catch (e) {
-        console.warn("Could not load seasonal parameters:", e);
-      }
+    function applySeasonalParams(season) {
+      const sp = SEASONAL_DATA?.seasons?.[season];
+      if (!sp) return;
+      if (sp.style) STYLE.push(...sp.style);
+      if (sp.quality) QUAL.push(...sp.quality);
+      if (sp.texture) TEX.push(...sp.texture);
+      if (sp.sound) SND.push(...sp.sound);
+      if (sp.tonal) TON.push(...sp.tonal);
+      if (sp.energyArc) ARC.push(...sp.energyArc);
+      if (sp.tempoFeel) SEASONAL_FEELS.push(...sp.tempoFeel);
     }
-    loadSeasonalParams();
+    applySeasonalParams(currentSeason);
 
     const G = {
       tempo() {
@@ -1042,10 +1188,27 @@
         const phrase = g ? pick([`in ${n}, grouped ${g.replace(/\+/g, "-")}`, `a ${n} feel, ${g.replace(/\+/g, "-")}`]) : pick([`in ${n}`, `a ${n} feel`]);
         return { v: String(n), s: g ? "grouped " + g : "straight", n, g, phrase }
       },
-      phrasing() {
-        const c = pick(COUNTS), en = pick(ENTER), ed = pick(END);
-        const phrase = pick([`phrases of ${c}`, `${c} counts`, `phrase it ${c}`]) + `, ${en}, ${ed}`;
-        return { v: c + " counts", s: en + ", " + ed, c, en, ed, phrase }
+      phrasing(meterNum) {
+        const n = (meterNum !== undefined) ? meterNum : (P.meter && P.meter.n !== undefined ? P.meter.n : 4);
+        if (n === 0) {
+          const v = pick(PHRASING_FREE);
+          const en = pick(ENTER_FREE);
+          const ed = pick(END_FREE);
+          const phrase = `${v.toLowerCase()}, ${en}, ${ed}`;
+          return { v, s: en + ", " + ed, en, ed, phrase, n };
+        }
+        let item;
+        if (n === 2 || n === 4) {
+          item = pick(PHRASING_DUPLE);
+        } else if (n === 3 || n === 6 || n === 9 || n === 12) {
+          item = pick(getTriplePhrasings(n));
+        } else {
+          item = pick(getOddPhrasings(n));
+        }
+        const en = pick(getMeteredEnter(n));
+        const ed = pick(END_METERED);
+        const phrase = `${item.phrase}, ${en}, ${ed}`;
+        return { v: item.v, s: en + ", " + ed, en, ed, phrase, n };
       },
       style() { const a = pick(STYLE); let b = pick(STYLE); const v = R(4) === 0 && b !== a ? a + " meets " + b : a; return { v, s: "" } },
       quality() { return { v: pick(QUAL), s: "" } },
@@ -1059,19 +1222,33 @@
       tonal() { return { v: pick(TON), s: "" } }
     };
 
-    const OPENS = ["Give me", "Let's have", "Try", "I'd like", "Take"];
+    const OPENS = ["Can you give us", "Let's have", "Try", "I'm looking for", "How about", "Let's go with"];
+    const TEMPLATES = [
+      { name: "narrative", usesOpen: true },
+      { name: "direct", usesOpen: false },
+      { name: "conversational", usesOpen: true },
+      { name: "shorthand", usesOpen: false },
+      { name: "atmospheric", usesOpen: true },
+      { name: "instructional", usesOpen: true }
+    ];
     const sentenceCfg = { template: 0, open: OPENS[0] };
+
+    const an = w => /^[aeiou]/i.test(w) ? "an" : "a";
 
     function say() {
       const { tempo: t, meter: m, phrasing: p, style: s, quality: q, texture: x, energy: e, sound: so, tonal: to } = P;
       const tm = t.phrase, mt = m.phrase, ph = p.phrase;
       const tx = `${x.t}, ${x.r} register`, sn = so.l.join(" and "), en = `${e.desc}, ${e.a}`;
       const open = sentenceCfg.open;
+      const oLead = open ? `${open} ` : "";
+      const artQ = an(q.v), artS = an(s.v);
       const T = [
-        `${open} something ${mt}, ${tm}. ${q.v} and ${s.v}. ${ph}. ${tx}, with ${sn}. ${en}.`,
+        `${open ? open + " something" : "Something"} ${mt}, ${tm}. ${q.v} and ${s.v}. ${ph}. ${tx}, with ${sn}. ${en}.`,
         `${mt}, ${tm}. Think ${s.v}, ${q.v}. ${ph}. ${sn}: ${tx}. Tonal color, ${to.v}. ${en}.`,
-        `${open} ${s.v}, ${q.v}, ${mt} at ${t.bpm}. ${tx}. ${sn}. ${ph}. ${en}.`,
-        `${sn}, please. ${s.v}, ${q.v}. ${mt}, ${tm}. ${ph}. ${tx}. ${en}, ${to.v}.`
+        `${oLead}${s.v}, ${q.v}, ${mt} at ${t.bpm}. ${tx}. ${sn}. ${ph}. ${en}.`,
+        `${sn}, please. ${s.v}, ${q.v}. ${mt}, ${tm}. ${ph}. ${tx}. ${en}, ${to.v}.`,
+        `${open ? `${open} ${artQ}` : cap(artQ)} ${q.v} atmosphere in ${to.v}. Build it ${tx}, using ${sn}. ${mt}, ${tm}. ${ph}. ${s.v}, ${en}.`,
+        `${open ? `${open} ${artS}` : cap(artS)} ${s.v} backdrop, ${q.v}. Set the tempo ${mt}, ${tm}. ${sn}: ${tx}. ${ph}. ${en}, ${to.v}.`
       ];
       return cap(T[sentenceCfg.template]);
     }
@@ -1087,16 +1264,16 @@
     const RIGHT_KEYS = ["sound", "tonal"];
     const SHACKLE = { on: "M8 11V8a4 4 0 018 0v3", off: "M8 11V8a4 4 0 017.4-2.1" };
 
-    KEYS.forEach(k => {
+    function createRow(label, onReroll, onToggleLock) {
       const r = document.createElement("div"); r.className = "row";
       r.innerHTML = `
-        <button type="button" class="lab-btn" aria-label="Reroll ${LAB[k]}" title="Click to reroll ${LAB[k]}" disabled>
-          <span class="lab">${LAB[k]}</span>
+        <button type="button" class="lab-btn" aria-label="Reroll ${label}" title="Click to reroll ${label}" disabled>
+          <span class="lab">${label}</span>
           <span class="ic-badge re-badge" aria-hidden="true">
             <svg class="re-icon" viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.3-5.6M20 4v4h-4"/></svg>
           </span>
         </button>
-        <button type="button" class="val-btn lk" aria-label="Lock ${LAB[k]}" title="Click to lock ${LAB[k]}" aria-pressed="false" disabled>
+        <button type="button" class="val-btn lk" aria-label="Lock ${label}" title="Click to lock ${label}" aria-pressed="false" disabled>
           <span class="v-wrap">
             <span class="v">—</span>
             <span class="s"></span>
@@ -1107,7 +1284,9 @@
         </button>`;
       const labBtn = r.querySelector(".lab-btn");
       const valBtn = r.querySelector(".val-btn");
-      rows[k] = {
+      labBtn.onclick = onReroll;
+      valBtn.onclick = onToggleLock;
+      return {
         el: r,
         v: r.querySelector(".v"),
         s: r.querySelector(".s"),
@@ -1115,58 +1294,63 @@
         lk: valBtn,
         p: valBtn.querySelector(".lk-icon path")
       };
-      labBtn.onclick = () => { if (!L[k] && KEYS.every(x => P[x])) { P[k] = G[k](); paint([k]) } };
-      valBtn.onclick = () => { if (KEYS.every(x => P[x])) { L[k] = !L[k]; paint([]) } };
+    }
+
+    function syncRowUI(row, label, isLocked, vText, sText, shouldFlash) {
+      row.v.textContent = vText;
+      row.s.textContent = sText;
+      row.el.classList.toggle("on", isLocked);
+      row.lk.disabled = false;
+      row.lk.setAttribute("aria-pressed", isLocked);
+      row.lk.setAttribute("aria-label", (isLocked ? "Unlock " : "Lock ") + label);
+      row.lk.title = (isLocked ? "Click to unlock " : "Click to lock ") + label;
+      row.p.setAttribute("d", isLocked ? SHACKLE.on : SHACKLE.off);
+      row.labBtn.disabled = isLocked;
+      row.labBtn.title = isLocked ? `${label} is locked` : `Click to reroll ${label}`;
+      if (shouldFlash) { flash(row.v); flash(row.s); }
+    }
+
+    KEYS.forEach(k => {
+      rows[k] = createRow(
+        LAB[k],
+        () => {
+          if (!L[k] && KEYS.every(x => P[x])) {
+            P[k] = G[k]();
+            const changed = [k];
+            if (k === "meter" && !L.phrasing) {
+              P.phrasing = G.phrasing(P.meter.n);
+              changed.push("phrasing");
+            }
+            paint(changed);
+          }
+        },
+        () => {
+          if (KEYS.every(x => P[x])) {
+            L[k] = !L[k];
+            paint([]);
+          }
+        }
+      );
     });
 
     /* --- Sentence row --- */
-    const sentenceRow = document.createElement("div"); sentenceRow.className = "row";
-    sentenceRow.innerHTML = `
-      <button type="button" class="lab-btn" aria-label="Reroll Sentence" title="Click to reroll Sentence" disabled>
-        <span class="lab">Sentence</span>
-        <span class="ic-badge re-badge" aria-hidden="true">
-          <svg class="re-icon" viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.3-5.6M20 4v4h-4"/></svg>
-        </span>
-      </button>
-      <button type="button" class="val-btn lk" aria-label="Lock Sentence" title="Click to lock Sentence" aria-pressed="false" disabled>
-        <span class="v-wrap">
-          <span class="v">—</span>
-          <span class="s"></span>
-        </span>
-        <span class="ic-badge lk-badge" aria-hidden="true">
-          <svg class="lk-icon" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="${SHACKLE.off}"/></svg>
-        </span>
-      </button>`;
-    const sLabBtn = sentenceRow.querySelector(".lab-btn");
-    const sValBtn = sentenceRow.querySelector(".val-btn");
-    const sRow = {
-      el: sentenceRow,
-      v: sentenceRow.querySelector(".v"),
-      s: sentenceRow.querySelector(".s"),
-      labBtn: sLabBtn,
-      lk: sValBtn,
-      p: sValBtn.querySelector(".lk-icon path")
-    };
     let sentenceLocked = false;
-    sLabBtn.onclick = () => {
-      if (!sentenceLocked && KEYS.every(k => P[k])) {
-        sentenceCfg.template = R(4);
-        sentenceCfg.open = pick(OPENS);
-        paint([], true);
+    const sRow = createRow(
+      "Sentence",
+      () => {
+        if (!sentenceLocked && KEYS.every(k => P[k])) {
+          sentenceCfg.template = R(TEMPLATES.length);
+          sentenceCfg.open = pick(OPENS);
+          paint([], true);
+        }
+      },
+      () => {
+        if (KEYS.every(k => P[k])) {
+          sentenceLocked = !sentenceLocked;
+          paint([]);
+        }
       }
-    };
-    sValBtn.onclick = () => {
-      if (KEYS.every(k => P[k])) {
-        sentenceLocked = !sentenceLocked;
-        sRow.el.classList.toggle("on", sentenceLocked);
-        sRow.lk.setAttribute("aria-pressed", sentenceLocked);
-        sRow.lk.setAttribute("aria-label", (sentenceLocked ? "Unlock" : "Lock") + " Sentence");
-        sRow.lk.title = (sentenceLocked ? "Click to unlock" : "Click to lock") + " Sentence";
-        sRow.p.setAttribute("d", sentenceLocked ? SHACKLE.on : SHACKLE.off);
-        sRow.labBtn.disabled = sentenceLocked;
-        sRow.labBtn.title = sentenceLocked ? "Sentence is locked" : "Click to reroll Sentence";
-      }
-    };
+    );
 
     /* --- Responsive distribution --- */
     const mql = window.matchMedia("(min-width: 1100px)");
@@ -1188,29 +1372,14 @@
     function paint(changed, sentenceChanged = false) {
       KEYS.forEach(k => {
         const r = rows[k], d = P[k]; if (!d) return;
-        r.v.textContent = d.v; r.s.textContent = d.s;
-        r.el.classList.toggle("on", !!L[k]);
-        r.lk.disabled = false; r.lk.setAttribute("aria-pressed", !!L[k]);
-        r.lk.setAttribute("aria-label", (L[k] ? "Unlock " : "Lock ") + LAB[k]);
-        r.lk.title = (L[k] ? "Click to unlock " : "Click to lock ") + LAB[k];
-        r.p.setAttribute("d", L[k] ? SHACKLE.on : SHACKLE.off);
-        r.labBtn.disabled = !!L[k];
-        r.labBtn.title = L[k] ? `${LAB[k]} is locked` : `Click to reroll ${LAB[k]}`;
-        if (changed.includes(k)) { flash(r.v); flash(r.s) }
+        syncRowUI(r, LAB[k], !!L[k], d.v, d.s, changed.includes(k));
       });
       if (KEYS.every(k => P[k])) {
         sayEl.textContent = say(); sayEl.classList.remove("empty");
-        if (changed.length || sentenceChanged) { flash(sayEl) }
-        sRow.v.textContent = sentenceCfg.open + "…";
-        sRow.s.textContent = ["narrative", "direct", "conversational", "shorthand"][sentenceCfg.template];
-        sRow.lk.disabled = false;
-        sRow.lk.setAttribute("aria-pressed", sentenceLocked);
-        sRow.lk.setAttribute("aria-label", (sentenceLocked ? "Unlock" : "Lock") + " Sentence");
-        sRow.lk.title = (sentenceLocked ? "Click to unlock" : "Click to lock") + " Sentence";
-        sRow.p.setAttribute("d", sentenceLocked ? SHACKLE.on : SHACKLE.off);
-        sRow.labBtn.disabled = sentenceLocked;
-        sRow.labBtn.title = sentenceLocked ? "Sentence is locked" : "Click to reroll Sentence";
-        if (sentenceChanged) { flash(sRow.v); flash(sRow.s) }
+        if (changed.length || sentenceChanged) { flash(sayEl); }
+        const tmpl = TEMPLATES[sentenceCfg.template];
+        const sVal = tmpl.usesOpen && sentenceCfg.open ? sentenceCfg.open + "…" : "—";
+        syncRowUI(sRow, "Sentence", sentenceLocked, sVal, tmpl.name, sentenceChanged);
       }
       let b = 60 / P.tempo.bpm; while (b < .3) b *= 2;
       const e = P.energy.n;
@@ -1229,7 +1398,7 @@
       ch.forEach(k => P[k] = G[k]());
       let sentenceChanged = false;
       if (!sentenceLocked) {
-        sentenceCfg.template = R(4);
+        sentenceCfg.template = R(TEMPLATES.length);
         sentenceCfg.open = pick(OPENS);
         sentenceChanged = true;
       }
